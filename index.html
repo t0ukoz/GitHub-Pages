@@ -10,14 +10,6 @@
     <!-- GSAP & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <!-- Three.js partikkelitaustalle -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
-            }
-        }
-    </script>
     <style>
         * {
             margin: 0;
@@ -33,7 +25,7 @@
             line-height: 1.5;
         }
 
-        /* 3D taustakontti */
+        /* Canvas taustalle (node verkko + tähdet) */
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -42,16 +34,17 @@
             height: 100%;
             z-index: -2;
             pointer-events: none;
+            display: block;
         }
 
-        /* gradient overlay */
+        /* gradient overlay pehmentää */
         .overlay-grad {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 20% 30%, rgba(10,10,30,0.7), rgba(0,0,0,0.85));
+            background: radial-gradient(circle at 30% 40%, rgba(10,10,30,0.6), rgba(0,0,0,0.85));
             z-index: -1;
             pointer-events: none;
         }
@@ -71,7 +64,7 @@
             left: 0;
             width: 100%;
             padding: 20px 0;
-            background: rgba(5, 5, 20, 0.7);
+            background: rgba(5, 5, 20, 0.65);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 100, 200, 0.3);
             z-index: 1000;
@@ -181,6 +174,50 @@
             margin: 1.5rem auto;
             color: #ccc;
             font-size: 1.1rem;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #FF4D6D, #FFB347);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #0a0a1a;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255,77,109,0.4);
+        }
+        .btn-outline-light {
+            background: transparent;
+            border: 2px solid #FFB347;
+            color: #FFB347;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        .btn-outline-light:hover {
+            background: #FFB347;
+            color: #0a0a1a;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(255,180,70,0.3);
         }
 
         /* yleiset otsikot */
@@ -320,33 +357,6 @@
             letter-spacing: 1px;
         }
 
-        /* cv-nappi */
-        .cv-section {
-            text-align: center;
-            margin: 20px 0 40px;
-        }
-        .cv-download-btn {
-            background: transparent;
-            border: 2px solid #FFB347;
-            color: #FFB347;
-            padding: 14px 42px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 60px;
-            backdrop-filter: blur(8px);
-            transition: 0.3s;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .cv-download-btn:hover {
-            background: #FFB347;
-            color: #0a0a1a;
-            transform: translateY(-4px);
-            box-shadow: 0 0 25px #FFB347;
-        }
-
         /* contact */
         .contact-grid {
             display: grid;
@@ -378,15 +388,6 @@
             border-radius: 28px;
             color: white;
             margin-top: 6px;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #FF4D6D, #FFB347);
-            border: none;
-            padding: 12px 28px;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #0a0a1a;
         }
 
         footer {
@@ -435,7 +436,7 @@
 </head>
 <body>
 
-<div id="bg-canvas"></div>
+<canvas id="bg-canvas"></canvas>
 <div class="overlay-grad"></div>
 <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
 
@@ -462,9 +463,10 @@
             <div class="tagline">✨ ohjelmistokehitys • pelinkehitys • 2D palikkaseikkailu ✨</div>
             <h1>Touko Pelkonen</h1>
             <p>Ensimmäisen vuoden ohjelmistokehityksen opiskelija, joka rakastaa teknologiaa, tietokoneiden kasaamista ja uniikkien pelikokemusten luomista. Myyn kasattuja koneita Tori.fi-palvelussa ja kehitän omaa 2D selviytymispeliä, jossa voit tuhota ja asettaa palikoita vapaasti!</p>
-            <div style="display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap;">
-                <a href="#projects" class="btn-primary" style="text-decoration: none;"><i class="fas fa-rocket"></i> Tutki projekteja</a>
-                <a href="#contact" class="btn-primary" style="background: transparent; border: 2px solid #FFB347; color:#FFB347;"><i class="fas fa-paper-plane"></i> Ota yhteyttä</a>
+            <div class="hero-buttons">
+                <a href="#projects" class="btn-primary"><i class="fas fa-rocket"></i> Tutki projekteja</a>
+                <a href="#contact" class="btn-outline-light"><i class="fas fa-paper-plane"></i> Ota yhteyttä</a>
+                <button id="heroCvBtn" class="btn-outline-light" style="cursor:pointer;"><i class="fas fa-file-pdf"></i> Lataa CV</button>
             </div>
         </div>
     </section>
@@ -491,19 +493,12 @@
         </div>
     </section>
 
-    <!-- PROJEKTIOSIO -->
     <section id="projects">
         <div class="container">
             <h2 class="section-title">// Projektit</h2>
             <div class="grid-3" id="projectsGrid"></div>
         </div>
     </section>
-
-    <!-- CV LATAAUSNAPPI (alempaa) -->
-    <div class="container cv-section">
-        <button id="downloadCvBtn" class="cv-download-btn"><i class="fas fa-file-pdf"></i> Lataa CV (Toukon cv.pdf)</button>
-        <p style="margin-top: 12px; font-size: 0.85rem;">Huippuosaamista & intohimoa tekniikkaan</p>
-    </div>
 
     <section id="contact">
         <div class="container">
@@ -537,191 +532,272 @@
     </div>
 </footer>
 
-<script type="module">
-    import * as THREE from 'three';
-
-    // --- THREE.JS partikkeliverkko (wow-tausta) ---
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 0);
-    document.getElementById('bg-canvas').appendChild(renderer.domElement);
-
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 1400;
-    const posArray = new Float32Array(particlesCount * 3);
-    for(let i = 0; i < particlesCount * 3; i += 3) {
-        posArray[i] = (Math.random() - 0.5) * 80;
-        posArray[i+1] = (Math.random() - 0.5) * 50;
-        posArray[i+2] = (Math.random() - 0.5) * 40 - 20;
-    }
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.08,
-        color: 0xffb347,
-        transparent: true,
-        opacity: 0.5,
-        blending: THREE.AdditiveBlending
-    });
-    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particlesMesh);
-    // toinen värikerros
-    const particlesMaterial2 = new THREE.PointsMaterial({ size: 0.05, color: 0xff4d6d, transparent: true, blending: THREE.AdditiveBlending });
-    const particlesMesh2 = new THREE.Points(particlesGeometry, particlesMaterial2);
-    scene.add(particlesMesh2);
-    camera.position.z = 25;
-    
-    let time = 0;
-    function animateBg() {
-        requestAnimationFrame(animateBg);
-        time += 0.002;
-        particlesMesh.rotation.y = time * 0.1;
-        particlesMesh.rotation.x = Math.sin(time * 0.2) * 0.1;
-        particlesMesh2.rotation.y = -time * 0.08;
-        renderer.render(scene, camera);
-    }
-    animateBg();
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    // --- GSAP animaatiot ---
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.utils.toArray('.glass-card, .skill-category, .project-card, .section-title').forEach(el => {
-        gsap.from(el, {
-            scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' },
-            opacity: 0,
-            y: 60,
-            duration: 0.8,
-            ease: 'power2.out'
-        });
-    });
-</script>
-
 <script>
-    // --- PROJEKTI DATA (oma määrite playableGame) ---
-    const projectsData = [
-        {
-            title: "Portfolio 3000",
-            desc: "Moderni portfoliosivusto, jossa 3D-partikkelitausta, GSAP-animaatiot ja värikäs teema. Täysin responsiivinen.",
-            tags: ["HTML5","CSS3","JS","Three.js"],
-            status: "Valmis",
-            playableGame: false
-        },
-        {
-            title: "✨ 2D Seikkailu/Selviytymispeli – PALIKKAPELI ✨",
-            desc: "Oma peliprojektini: 2D sandbox jossa voit tuhota ja asettaa palikoita vapaasti! Seikkailu ja selviytyminen retrotyyliin. Peli on vasta alkuvaiheessa, mutta pelattavissa.",
-            tags: ["Unity","C#","WebGL","2D Physics"],
-            status: "Early Access",
-            playableGame: true,
-            gameUrl: "Peli/Game.html"
-        }
-    ];
-
-    const projectsGrid = document.getElementById('projectsGrid');
-    function renderProjects() {
-        projectsGrid.innerHTML = '';
-        projectsData.forEach(proj => {
-            const card = document.createElement('div');
-            card.className = 'project-card';
-            let gameBtn = '';
-            if (proj.playableGame) {
-                gameBtn = `<button class="game-play-btn" data-gameurl="${proj.gameUrl}"><i class="fas fa-dragon"></i> 🎮 PELAA 2D PALIKKAPELIÄ 🎮 <i class="fas fa-cubes"></i></button>`;
-            } else {
-                gameBtn = `<div style="margin-top:20px;"><a href="#" class="project-link" style="color:#FFB347;"><i class="fas fa-globe"></i> Live Demo</a></div>`;
+    (function() {
+        // --- NODE-VERKKO JA TÄHDET (leijuvat viivat + pisteet, reagoi skrollaukseen)
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let nodes = [];
+        let stars = [];
+        let scrollY = 0;
+        const NODE_COUNT = 45;
+        const EDGE_DISTANCE = 180;
+        const STAR_COUNT = 400;
+        
+        function initNodes() {
+            nodes = [];
+            for (let i = 0; i < NODE_COUNT; i++) {
+                nodes.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.2,
+                    radius: 2 + Math.random() * 3
+                });
             }
-            card.innerHTML = `
-                <div class="project-status">${proj.status}</div>
-                <div class="project-content">
-                    <h3>${proj.title}</h3>
-                    <p>${proj.desc}</p>
-                    <div>${proj.tags.map(t => `<span class="tech-tag">${t}</span>`).join('')}</div>
-                    ${gameBtn}
-                </div>
-            `;
-            projectsGrid.appendChild(card);
+        }
+        
+        function initStars() {
+            stars = [];
+            for (let i = 0; i < STAR_COUNT; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: 1 + Math.random() * 2.5,
+                    alpha: 0.4 + Math.random() * 0.6,
+                    speed: 0.05 + Math.random() * 0.15
+                });
+            }
+        }
+        
+        function updateNodes() {
+            for (let node of nodes) {
+                node.x += node.vx;
+                node.y += node.vy;
+                if (node.x < -50) node.x = width + 50;
+                if (node.x > width + 50) node.x = -50;
+                if (node.y < -50) node.y = height + 50;
+                if (node.y > height + 50) node.y = -50;
+            }
+        }
+        
+        function draw() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, width, height);
+            
+            // 1) piirrä tähdet (liikkuvat hitaasti skrollin mukaan)
+            for (let star of stars) {
+                // tähdet liikkuvat hieman skrollinopeuden mukaan (tehoste)
+                let offsetY = scrollY * 0.15 * star.speed;
+                let yPos = (star.y + offsetY) % height;
+                if (yPos < 0) yPos += height;
+                ctx.beginPath();
+                ctx.arc(star.x, yPos, star.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 220, 150, ${star.alpha * 0.7})`;
+                ctx.fill();
+                // pieni glow
+                ctx.shadowBlur = 4;
+                ctx.shadowColor = "#FFB347";
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+            
+            // 2) piirrä viivat solmujen välille (vain jos etäisyys alle EDGE_DISTANCE)
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist < EDGE_DISTANCE) {
+                        const opacity = (1 - dist / EDGE_DISTANCE) * 0.4;
+                        ctx.beginPath();
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.strokeStyle = `rgba(255, 180, 70, ${opacity})`;
+                        ctx.lineWidth = 1.2;
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            // 3) piirrä solmut (nodet)
+            for (let node of nodes) {
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 100, 140, 0.9)`;
+                ctx.fill();
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = "#FF4D6D";
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, node.radius * 0.5, 0, Math.PI * 2);
+                ctx.fillStyle = "#FFB347";
+                ctx.fill();
+            }
+        }
+        
+        function animateBackground() {
+            if (!width || !height) return;
+            updateNodes();
+            draw();
+            requestAnimationFrame(animateBackground);
+        }
+        
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            initNodes();
+            initStars();
+        }
+        
+        window.addEventListener('resize', () => {
+            resizeCanvas();
         });
-
-        // pelinapit
-        document.querySelectorAll('.game-play-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const url = btn.getAttribute('data-gameurl');
-                if(url) window.open(url, '_blank');
-                else alert("Pelitiedostoa ei löydy: varmista että kansio Peli/Game.html on olemassa!");
+        
+        // skrollausefekti: tallennetaan scrollY ja vaikutetaan taustan liikkeeseen (tähdet reagoi)
+        window.addEventListener('scroll', () => {
+            scrollY = window.scrollY;
+        });
+        
+        resizeCanvas();
+        animateBackground();
+        
+        // --- PROJEKTI DATA ---
+        const projectsData = [
+            {
+                title: "Portfolio 3000",
+                desc: "Moderni portfoliosivusto, jossa dynaaminen node/viiva -verkko, GSAP-animaatiot ja värikäs teema.",
+                tags: ["HTML5","CSS3","JS","Canvas"],
+                status: "Valmis",
+                playableGame: false
+            },
+            {
+                title: "✨ 2D Seikkailu/Selviytymispeli – PALIKKAPELI ✨",
+                desc: "Oma peliprojektini: 2D sandbox jossa voit tuhota ja asettaa palikoita vapaasti! Seikkailu ja selviytyminen retrotyyliin. Peli on vasta alkuvaiheessa, mutta pelattavissa.",
+                tags: ["Unity","C#","WebGL","2D Physics"],
+                status: "Early Access",
+                playableGame: true,
+                gameUrl: "Peli/Game.html"
+            }
+        ];
+        
+        const projectsGrid = document.getElementById('projectsGrid');
+        function renderProjects() {
+            projectsGrid.innerHTML = '';
+            projectsData.forEach(proj => {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                let gameBtn = '';
+                if (proj.playableGame) {
+                    gameBtn = `<button class="game-play-btn" data-gameurl="${proj.gameUrl}"><i class="fas fa-dragon"></i> 🎮 PELAA 2D PALIKKAPELIÄ 🎮 <i class="fas fa-cubes"></i></button>`;
+                } else {
+                    gameBtn = `<div style="margin-top:20px;"><a href="#" class="project-link" style="color:#FFB347;"><i class="fas fa-globe"></i> Live Demo</a></div>`;
+                }
+                card.innerHTML = `
+                    <div class="project-status">${proj.status}</div>
+                    <div class="project-content">
+                        <h3>${proj.title}</h3>
+                        <p>${proj.desc}</p>
+                        <div>${proj.tags.map(t => `<span class="tech-tag">${t}</span>`).join('')}</div>
+                        ${gameBtn}
+                    </div>
+                `;
+                projectsGrid.appendChild(card);
             });
-        });
-    }
-    renderProjects();
-
-    // CV LATAAUS (Toukon cv.pdf)
-    const cvBtn = document.getElementById('downloadCvBtn');
-    if(cvBtn) {
-        cvBtn.addEventListener('click', () => {
+            
+            document.querySelectorAll('.game-play-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const url = btn.getAttribute('data-gameurl');
+                    if(url) window.open(url, '_blank');
+                    else alert("Pelitiedostoa ei löydy: varmista että kansio Peli/Game.html on olemassa!");
+                });
+            });
+        }
+        renderProjects();
+        
+        // CV LATAAUS (toimii hero-painikkeella ja lisäksi erillinen id)
+        function downloadCV() {
             const link = document.createElement('a');
             link.href = "Toukon cv.pdf";
             link.download = "Toukon_cv.pdf";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }
+        const heroCvBtn = document.getElementById('heroCvBtn');
+        if(heroCvBtn) heroCvBtn.addEventListener('click', downloadCV);
+        // myös vanha mahdollinen nappi, mutta poistettu alempaa, mutta varmistetaan ettei konflikteja
+        
+        // HEADER SCROLL & BACK TO TOP
+        const header = document.getElementById('header');
+        const backTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if(window.scrollY > 60) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+            if(window.scrollY > 400) backTop.style.opacity = '1';
+            else backTop.style.opacity = '0';
         });
-    }
-
-    // HEADER SCROLL & BACK TO TOP
-    const header = document.getElementById('header');
-    const backTop = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => {
-        if(window.scrollY > 60) header.classList.add('scrolled');
-        else header.classList.remove('scrolled');
-        if(window.scrollY > 400) backTop.style.opacity = '1';
-        else backTop.style.opacity = '0';
-    });
-    backTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
-    
-    // MOBILE MENU
-    const menuToggle = document.getElementById('menuToggle');
-    const navLinks = document.getElementById('navLinks');
-    menuToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        const icon = menuToggle.querySelector('i');
-        icon.classList.toggle('fa-bars');
-        icon.classList.toggle('fa-times');
-    });
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            navLinks.classList.remove('active');
+        backTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+        
+        // MOBILE MENU
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
             const icon = menuToggle.querySelector('i');
-            if(icon) icon.classList = 'fas fa-bars';
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
         });
-    });
-
-    // contact form
-    const contactForm = document.getElementById('contactForm');
-    if(contactForm) {
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert(`Kiitos viestistä! Olen yhteydessä mahdollisimman pian. - Touko`);
-            contactForm.reset();
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                const icon = menuToggle.querySelector('i');
+                if(icon) icon.classList = 'fas fa-bars';
+            });
         });
-    }
-
-    // skill bar animaatio (scroll)
-    const skillObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if(entry.isIntersecting) {
-                const bars = entry.target.querySelectorAll('.skill-level');
-                bars.forEach(bar => {
-                    const width = bar.style.width;
-                    bar.style.width = '0%';
-                    setTimeout(() => bar.style.width = width, 80);
-                });
-                skillObserver.unobserve(entry.target);
-            }
+        
+        // contact form
+        const contactForm = document.getElementById('contactForm');
+        if(contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert(`Kiitos viestistä! Olen yhteydessä mahdollisimman pian. - Touko`);
+                contactForm.reset();
+            });
+        }
+        
+        // skill bar animaatio (scroll)
+        const skillObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const bars = entry.target.querySelectorAll('.skill-level');
+                    bars.forEach(bar => {
+                        const width = bar.style.width;
+                        bar.style.width = '0%';
+                        setTimeout(() => bar.style.width = width, 80);
+                    });
+                    skillObserver.unobserve(entry.target);
+                }
+            });
+        }, {threshold:0.4});
+        document.querySelectorAll('.skill-category').forEach(cat => skillObserver.observe(cat));
+        
+        // GSAP animaatiot (korteille)
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray('.glass-card, .skill-category, .project-card, .section-title').forEach(el => {
+            gsap.from(el, {
+                scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' },
+                opacity: 0,
+                y: 50,
+                duration: 0.7,
+                ease: 'power2.out'
+            });
         });
-    }, {threshold:0.4});
-    document.querySelectorAll('.skill-category').forEach(cat => skillObserver.observe(cat));
+    })();
 </script>
 </body>
 </html>
