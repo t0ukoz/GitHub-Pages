@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Touko Pelkonen | 2D palikkapeli & teknologia</title>
+    <title>t0ukoz | 2D palikkapeli & teknologia</title>
     <!-- Google Fonts & Font Awesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -82,13 +82,24 @@
         }
         .logo {
             font-family: 'Space Grotesk', monospace;
-            font-size: 1.8rem;
+            text-align: left;
+            line-height: 1.2;
+        }
+        .logo .leet {
+            font-size: 1.9rem;
             font-weight: 800;
             background: linear-gradient(135deg, #FF4D6D, #FFB347, #4DFF9E);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             letter-spacing: -1px;
+        }
+        .logo .name {
+            font-size: 0.8rem;
+            display: block;
+            color: #aaa;
+            letter-spacing: normal;
+            font-weight: 500;
         }
         .nav-links {
             display: flex;
@@ -443,7 +454,10 @@
 <header id="header">
     <div class="container">
         <nav class="nav-container">
-            <div class="logo"><i class="fas fa-cube"></i> TOUKO<span style="color:#FFB347">.dev</span></div>
+            <div class="logo">
+                <span class="leet">t0ukoz</span>
+                <span class="name">Touko Pelkonen</span>
+            </div>
             <div class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></div>
             <div class="nav-links" id="navLinks">
                 <a href="#home">ETUSIVU</a>
@@ -543,14 +557,12 @@
         let scrollY = 0;
         let mouseX = -1000, mouseY = -1000;
         
-        // Säädettävät parametrit
-        const NODE_COUNT = 110;            // lisätty nodeja (aikaisemmin 55)
-        const EDGE_DISTANCE = 200;          // hieman suurempi etäisyys viivoille
-        const STAR_COUNT = 350;             // vähemmän tähtiä, jotta nodet erottuu paremmin
+        const NODE_COUNT = 110;
+        const EDGE_DISTANCE = 200;
+        const STAR_COUNT = 350;
         const MOUSE_REPULSE_RADIUS = 140;
-        const MOUSE_FORCE = 1.0;            // voimakkaampi hylkiminen
+        const MOUSE_FORCE = 1.0;
         
-        // Solmujen alustus
         function initNodes() {
             nodes = [];
             for (let i = 0; i < NODE_COUNT; i++) {
@@ -559,12 +571,11 @@
                     y: Math.random() * height,
                     vx: (Math.random() - 0.5) * 0.35,
                     vy: (Math.random() - 0.5) * 0.35,
-                    radius: 3 + Math.random() * 4.5      // isompia ja näkyvämpiä
+                    radius: 3 + Math.random() * 4.5
                 });
             }
         }
         
-        // Tähtien alustus (himmeämmät)
         function initStars() {
             stars = [];
             for (let i = 0; i < STAR_COUNT; i++) {
@@ -572,16 +583,14 @@
                     x: Math.random() * width,
                     y: Math.random() * height,
                     size: 0.8 + Math.random() * 1.8,
-                    alpha: 0.2 + Math.random() * 0.35,   // himmeämpi alpha
+                    alpha: 0.2 + Math.random() * 0.35,
                     speed: 0.03 + Math.random() * 0.1
                 });
             }
         }
         
-        // Päivitä solmujen liikkeet + hiiren hylkiminen
         function updateNodes() {
             for (let node of nodes) {
-                // Hylkimisvoima hiiren suhteen
                 const dx = node.x - mouseX;
                 const dy = node.y - mouseY;
                 const dist = Math.hypot(dx, dy);
@@ -594,15 +603,11 @@
                     node.vy += pushY;
                 }
                 
-                // Päivitys
                 node.x += node.vx;
                 node.y += node.vy;
-                
-                // Vaimennus (jottei mene överiksi)
                 node.vx *= 0.99;
                 node.vy *= 0.99;
                 
-                // Pehmeät reunaehdot (wrap-around)
                 if (node.x < -100) node.x = width + 100;
                 if (node.x > width + 100) node.x = -100;
                 if (node.y < -100) node.y = height + 100;
@@ -610,12 +615,11 @@
             }
         }
         
-        // Piirto
         function draw() {
             if (!ctx) return;
             ctx.clearRect(0, 0, width, height);
             
-            // 1) Tähdet (himmeät, taustalla)
+            // Tähdet (himmeät)
             for (let star of stars) {
                 let offsetY = scrollY * 0.08 * star.speed;
                 let yPos = (star.y + offsetY) % height;
@@ -630,14 +634,13 @@
                 ctx.shadowBlur = 0;
             }
             
-            // 2) Viivat solmujen välillä (näkyvämmät)
+            // Viivat
             for (let i = 0; i < nodes.length; i++) {
                 for (let j = i + 1; j < nodes.length; j++) {
                     const dx = nodes[i].x - nodes[j].x;
                     const dy = nodes[i].y - nodes[j].y;
                     const dist = Math.hypot(dx, dy);
                     if (dist < EDGE_DISTANCE) {
-                        // Viivan voimakkuus etäisyyden mukaan
                         const opacity = (1 - dist / EDGE_DISTANCE) * 0.65;
                         ctx.beginPath();
                         ctx.moveTo(nodes[i].x, nodes[i].y);
@@ -649,9 +652,8 @@
                 }
             }
             
-            // 3) Solmut (pallot) – kirkkaammat ja isommat
+            // Nodet (kirkkaat)
             for (let node of nodes) {
-                // Ulkokuula (glow)
                 ctx.beginPath();
                 ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
                 ctx.fillStyle = `rgba(255, 100, 140, 0.95)`;
@@ -660,12 +662,10 @@
                 ctx.shadowColor = "#FF4D6D";
                 ctx.fill();
                 ctx.shadowBlur = 0;
-                // Sisäkuula (kirkas)
                 ctx.beginPath();
                 ctx.arc(node.x, node.y, node.radius * 0.6, 0, Math.PI * 2);
                 ctx.fillStyle = "#FFB347";
                 ctx.fill();
-                // Pieni glow-efekti
                 ctx.shadowBlur = 6;
                 ctx.shadowColor = "#FFB347";
                 ctx.fill();
@@ -673,7 +673,6 @@
             }
         }
         
-        // Animaatiosilmukka
         function animateBackground() {
             if (!width || !height) return;
             updateNodes();
@@ -681,7 +680,6 @@
             requestAnimationFrame(animateBackground);
         }
         
-        // Ikkunan koon muutos
         function resizeCanvas() {
             width = window.innerWidth;
             height = window.innerHeight;
@@ -691,7 +689,6 @@
             initStars();
         }
         
-        // Hiiren liikkeen seuranta
         window.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
@@ -700,8 +697,6 @@
             mouseX = -1000;
             mouseY = -1000;
         });
-        
-        // Skrollaus vaikutus tähtiin (kevyt)
         window.addEventListener('scroll', () => {
             scrollY = window.scrollY;
         });
@@ -712,12 +707,12 @@
             resizeCanvas();
         });
         
-        // --- PROJEKTI DATA ---
+        // --- PROJEKTI DATA (korjattu kuvaus) ---
         const projectsData = [
             {
-                title: "Portfolio 3000 - interaktiivinen",
-                desc: "Moderni portfoliosivusto, jossa leijuva node/viiva -verkko, hiiren hylkimisvaikutus, GSAP-animaatiot ja värikäs teema.",
-                tags: ["HTML5","CSS3","JS","Canvas"],
+                title: "Portfolio - itse tehty (tekoälyä apuna)",
+                desc: "Tämä portfoliosivusto on rakennettu itse, hyödyntäen tekoälyä avustajana koodauksessa. Taustalla leijuva interaktiivinen node/viiva -verkko, GSAP-animaatiot ja responsiivinen design.",
+                tags: ["HTML5","CSS3","JS","Canvas","GSAP"],
                 status: "Valmis",
                 playableGame: false
             },
@@ -741,7 +736,7 @@
                 if (proj.playableGame) {
                     gameBtn = `<button class="game-play-btn" data-gameurl="${proj.gameUrl}"><i class="fas fa-dragon"></i> 🎮 PELAA 2D PALIKKAPELIÄ 🎮 <i class="fas fa-cubes"></i></button>`;
                 } else {
-                    gameBtn = `<div style="margin-top:20px;"><a href="#" class="project-link" style="color:#FFB347;"><i class="fas fa-globe"></i> Live Demo</a></div>`;
+                    gameBtn = `<div style="margin-top:20px;"><a href="#" class="project-link" style="color:#FFB347;"><i class="fas fa-globe"></i> Live Demo (tämä sivu)</a></div>`;
                 }
                 card.innerHTML = `
                     <div class="project-status">${proj.status}</div>
@@ -765,7 +760,7 @@
         }
         renderProjects();
         
-        // CV LATAAUS
+        // CV lataus
         function downloadCV() {
             const link = document.createElement('a');
             link.href = "Toukon cv.pdf";
@@ -777,7 +772,7 @@
         const heroCvBtn = document.getElementById('heroCvBtn');
         if(heroCvBtn) heroCvBtn.addEventListener('click', downloadCV);
         
-        // HEADER SCROLL & BACK TO TOP
+        // Header scroll & back to top
         const header = document.getElementById('header');
         const backTop = document.getElementById('backToTop');
         window.addEventListener('scroll', () => {
@@ -788,7 +783,7 @@
         });
         backTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
         
-        // MOBILE MENU
+        // Mobile menu
         const menuToggle = document.getElementById('menuToggle');
         const navLinks = document.getElementById('navLinks');
         menuToggle.addEventListener('click', () => {
