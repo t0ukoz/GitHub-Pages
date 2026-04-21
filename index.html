@@ -33,7 +33,7 @@
             width: 100%;
             height: 100%;
             z-index: -2;
-            pointer-events: none; /* Jotta hiiren tapahtumat menevät sisällölle, mutta saamme hiiren koordinaatit canvasin kautta? Parempi laittaa pointer-events: none, mutta hiiren liikkeen seuraamiseen tarvitaan window mousemove */
+            pointer-events: none;
             display: block;
         }
 
@@ -534,20 +534,21 @@
 
 <script>
     (function() {
-        // --- INTERAKTIIVINEN NODE-VERKKO JA TÄHDET, HIIREN HYLTIMINEN ---
+        // --- PARANNELTU TAUSTA: ENEMMÄN NODEJA, KIRKKAAMMAT, TÄHDET HIMMEÄMPIÄ ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let width, height;
         let nodes = [];
         let stars = [];
         let scrollY = 0;
-        let mouseX = -1000, mouseY = -1000; // hiiren sijainti (alkuun pois näkyvistä)
+        let mouseX = -1000, mouseY = -1000;
         
-        const NODE_COUNT = 55;          // hieman enemmän solmuja näyttävyyttä
-        const EDGE_DISTANCE = 190;
-        const STAR_COUNT = 450;
-        const MOUSE_REPULSE_RADIUS = 130;
-        const MOUSE_FORCE = 0.8;
+        // Säädettävät parametrit
+        const NODE_COUNT = 110;            // lisätty nodeja (aikaisemmin 55)
+        const EDGE_DISTANCE = 200;          // hieman suurempi etäisyys viivoille
+        const STAR_COUNT = 350;             // vähemmän tähtiä, jotta nodet erottuu paremmin
+        const MOUSE_REPULSE_RADIUS = 140;
+        const MOUSE_FORCE = 1.0;            // voimakkaampi hylkiminen
         
         // Solmujen alustus
         function initNodes() {
@@ -556,23 +557,23 @@
                 nodes.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.25,
-                    vy: (Math.random() - 0.5) * 0.25,
-                    radius: 2.5 + Math.random() * 3.5
+                    vx: (Math.random() - 0.5) * 0.35,
+                    vy: (Math.random() - 0.5) * 0.35,
+                    radius: 3 + Math.random() * 4.5      // isompia ja näkyvämpiä
                 });
             }
         }
         
-        // Tähtien alustus
+        // Tähtien alustus (himmeämmät)
         function initStars() {
             stars = [];
             for (let i = 0; i < STAR_COUNT; i++) {
                 stars.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    size: 1 + Math.random() * 2.5,
-                    alpha: 0.4 + Math.random() * 0.6,
-                    speed: 0.05 + Math.random() * 0.15
+                    size: 0.8 + Math.random() * 1.8,
+                    alpha: 0.2 + Math.random() * 0.35,   // himmeämpi alpha
+                    speed: 0.03 + Math.random() * 0.1
                 });
             }
         }
@@ -601,11 +602,11 @@
                 node.vx *= 0.99;
                 node.vy *= 0.99;
                 
-                // Reunaehdot (wrap-around pehmeä)
-                if (node.x < -80) node.x = width + 80;
-                if (node.x > width + 80) node.x = -80;
-                if (node.y < -80) node.y = height + 80;
-                if (node.y > height + 80) node.y = -80;
+                // Pehmeät reunaehdot (wrap-around)
+                if (node.x < -100) node.x = width + 100;
+                if (node.x > width + 100) node.x = -100;
+                if (node.y < -100) node.y = height + 100;
+                if (node.y > height + 100) node.y = -100;
             }
         }
         
@@ -614,54 +615,61 @@
             if (!ctx) return;
             ctx.clearRect(0, 0, width, height);
             
-            // 1) Tähdet (liikkuvat hieman skrollin mukaan)
+            // 1) Tähdet (himmeät, taustalla)
             for (let star of stars) {
-                let offsetY = scrollY * 0.12 * star.speed;
+                let offsetY = scrollY * 0.08 * star.speed;
                 let yPos = (star.y + offsetY) % height;
                 if (yPos < 0) yPos += height;
                 ctx.beginPath();
                 ctx.arc(star.x, yPos, star.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 220, 150, ${star.alpha * 0.65})`;
+                ctx.fillStyle = `rgba(255, 210, 140, ${star.alpha * 0.5})`;
                 ctx.fill();
-                ctx.shadowBlur = 3;
+                ctx.shadowBlur = 2;
                 ctx.shadowColor = "#FFB347";
                 ctx.fill();
                 ctx.shadowBlur = 0;
             }
             
-            // 2) Viivat solmujen välillä (etäisyyspohjainen)
+            // 2) Viivat solmujen välillä (näkyvämmät)
             for (let i = 0; i < nodes.length; i++) {
                 for (let j = i + 1; j < nodes.length; j++) {
                     const dx = nodes[i].x - nodes[j].x;
                     const dy = nodes[i].y - nodes[j].y;
                     const dist = Math.hypot(dx, dy);
                     if (dist < EDGE_DISTANCE) {
-                        const opacity = (1 - dist / EDGE_DISTANCE) * 0.45;
+                        // Viivan voimakkuus etäisyyden mukaan
+                        const opacity = (1 - dist / EDGE_DISTANCE) * 0.65;
                         ctx.beginPath();
                         ctx.moveTo(nodes[i].x, nodes[i].y);
                         ctx.lineTo(nodes[j].x, nodes[j].y);
                         ctx.strokeStyle = `rgba(255, 180, 70, ${opacity})`;
-                        ctx.lineWidth = 1.3;
+                        ctx.lineWidth = 1.5;
                         ctx.stroke();
                     }
                 }
             }
             
-            // 3) Solmut (pallot)
+            // 3) Solmut (pallot) – kirkkaammat ja isommat
             for (let node of nodes) {
+                // Ulkokuula (glow)
                 ctx.beginPath();
                 ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 100, 140, 0.9)`;
+                ctx.fillStyle = `rgba(255, 100, 140, 0.95)`;
                 ctx.fill();
-                ctx.shadowBlur = 8;
+                ctx.shadowBlur = 12;
                 ctx.shadowColor = "#FF4D6D";
                 ctx.fill();
                 ctx.shadowBlur = 0;
-                // sisäkuula
+                // Sisäkuula (kirkas)
                 ctx.beginPath();
-                ctx.arc(node.x, node.y, node.radius * 0.5, 0, Math.PI * 2);
+                ctx.arc(node.x, node.y, node.radius * 0.6, 0, Math.PI * 2);
                 ctx.fillStyle = "#FFB347";
                 ctx.fill();
+                // Pieni glow-efekti
+                ctx.shadowBlur = 6;
+                ctx.shadowColor = "#FFB347";
+                ctx.fill();
+                ctx.shadowBlur = 0;
             }
         }
         
@@ -683,18 +691,17 @@
             initStars();
         }
         
-        // Hiiren liikkeen seuranta (canvas ei ota pointer-events, joten window)
+        // Hiiren liikkeen seuranta
         window.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
         });
-        // Jos hiiri poistuu ikkunasta, laitetaan kauas
         window.addEventListener('mouseleave', () => {
             mouseX = -1000;
             mouseY = -1000;
         });
         
-        // Skrollaus vaikutus tähtiin
+        // Skrollaus vaikutus tähtiin (kevyt)
         window.addEventListener('scroll', () => {
             scrollY = window.scrollY;
         });
@@ -705,7 +712,7 @@
             resizeCanvas();
         });
         
-        // --- PROJEKTI DATA (sisältää peli-määritteen) ---
+        // --- PROJEKTI DATA ---
         const projectsData = [
             {
                 title: "Portfolio 3000 - interaktiivinen",
@@ -758,7 +765,7 @@
         }
         renderProjects();
         
-        // CV LATAAUS (hero-painike)
+        // CV LATAAUS
         function downloadCV() {
             const link = document.createElement('a');
             link.href = "Toukon cv.pdf";
@@ -808,7 +815,7 @@
             });
         }
         
-        // Skill bar animaatio (scroll)
+        // Skill bar animaatio
         const skillObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
