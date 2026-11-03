@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Touko Pelkonen — Portfolio</title>
-<meta name="description" content="Touko Pelkonen — tieto- ja viestintätekniikan opiskelija. Web- ja pelikehitystä, tietokonelaitteistoa ja työharjoittelu Vectoramalla 2026.">
+<title>Touko Pelkonen — Ohjelmistokehittäjä</title>
+<meta name="description" content="Touko Pelkonen — ohjelmistokehityksen opiskelija. Web- ja pelikehitystä, tietokoneiden kokoamista ja asiakaspalvelua. Työharjoittelu Vectoramalla 2026.">
 <meta name="theme-color" content="#0a0a0b">
-<meta property="og:title" content="Touko Pelkonen — Portfolio">
-<meta property="og:description" content="Tieto- ja viestintätekniikan opiskelija: web, pelit ja laitteisto.">
+<meta property="og:title" content="Touko Pelkonen — Ohjelmistokehittäjä">
+<meta property="og:description" content="Ohjelmistokehityksen opiskelija: web, pelit ja laitteisto.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a0b'/%3E%3Ctext x='16' y='23' font-family='system-ui,sans-serif' font-size='18' font-weight='700' fill='%23ffb454' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
 
@@ -405,6 +405,19 @@
     gap: 0;
   }
 
+  .timeline-group + .timeline-group {
+    margin-top: clamp(36px, 5vw, 56px);
+  }
+
+  .timeline-title {
+    margin: 0 0 20px;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
   .entry {
     display: grid;
     grid-template-columns: 150px minmax(0, 1fr);
@@ -519,7 +532,7 @@
 
   .projects {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
   }
 
@@ -629,6 +642,12 @@
     color: var(--muted);
   }
 
+  .phone {
+    margin: 0 0 26px;
+    font-size: 1.05rem;
+    font-weight: 500;
+  }
+
   .email-row {
     display: flex;
     flex-wrap: wrap;
@@ -704,6 +723,10 @@
     .header-actions .btn-small { display: none; }
   }
 
+  @media (max-width: 640px) {
+    .projects { grid-template-columns: 1fr; }
+  }
+
   @media (max-width: 360px) {
     .brand span:last-child { display: none; }
   }
@@ -765,13 +788,14 @@
   <section class="hero" id="top">
     <div class="wrap hero-grid">
       <div>
-        <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Tieto- ja viestintätekniikka · OSAO</p>
+        <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Ohjelmistokehittäjä · OSAO</p>
         <h1>Touko<br>Pelkonen</h1>
         <p class="lead">
-          Opiskelen tieto- ja viestintätekniikkaa ja rakennan mielelläni kaikkea
-          selaimessa pyörivästä pelistä kasattuun pelikoneeseen. Kesällä 2026 olin
-          työharjoittelussa <strong>Vectoramalla</strong>, jossa hoidin tapahtuman
-          IT-tehtäviä ja asiakaspalvelua.
+          Ohjelmistokehityksen opiskelija, jolla on vahva kiinnostus
+          käytännönläheiseen ohjelmointiin ja web-teknologioihin. Kasaan ja
+          huollan tietokoneita sekä konsoleita, ja kesällä 2026 olin
+          työharjoittelussa <strong>Vectoramalla</strong> tapahtuman
+          IT-tehtävissä.
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#projektit">Katso projektit</a>
@@ -801,15 +825,20 @@
       <div class="about-grid">
         <div class="about-text">
           <p>
-            Olen toisen asteen opiskelija, jota kiinnostavat erityisesti
-            web-teknologiat, pelinkehitys ja tietokonelaitteisto. Tykkään tehdä
-            asioita alusta loppuun: suunnitella, toteuttaa ja viimeistellä.
+            Ohjelmistokehityksen opiskelija, jolla on vahva kiinnostus
+            käytännönläheiseen ohjelmointiin ja web-teknologioihin. Minulla on
+            kokemusta tietokoneiden kokoamisesta, suorituskyvyn optimoinnista
+            sekä asiakaslähtöisestä työskentelystä laitemyynnin parissa.
           </p>
           <p>
-            Vapaa-ajalla kokoan ja myyn tietokoneita sekä ylläpidän
-            Minecraft-serveriä. Työharjoittelussa Vectoramalla pääsin näkemään,
-            miltä IT-työ tapahtumaympäristössä näyttää – mattojen teippauksesta
-            verkkokaapelointiin ja asiakaspalveluun.
+            Työskentelen huolellisesti, opin nopeasti uutta ja olen motivoitunut
+            kehittämään osaamistani sekä ohjelmisto- että
+            laitteistoteknologioissa.
+          </p>
+          <p>
+            Tällä hetkellä kasaan uusista ja käytetyistä osista pelikoneita ja
+            myyn niitä Tori.fi:ssä. Modaan Xbox 360 -konsoleita, huollan niiden
+            ohjaimia ja teen huoltoja myös muille konsoleille, kuten PS4:lle.
           </p>
         </div>
 
@@ -829,13 +858,13 @@
           <div class="skill-group">
             <h3>Laitteisto</h3>
             <ul class="chips">
-              <li>PC-kokoonpanot</li><li>Komponentit</li><li>Käyttöönotto</li>
+              <li>PC-kokoonpanot</li><li>Suorituskyvyn optimointi</li><li>Konsolien huolto</li>
             </ul>
           </div>
           <div class="skill-group">
-            <h3>Työkalut</h3>
+            <h3>Muut</h3>
             <ul class="chips">
-              <li>Git</li><li>GitHub</li><li>VS Code</li><li>Blender</li>
+              <li>Python (perusteet)</li><li>Microsoft 365</li><li>Git</li><li>GitHub</li><li>VS Code</li><li>Blender</li>
             </ul>
           </div>
         </div>
@@ -851,7 +880,9 @@
         <h2>Kokemus</h2>
       </div>
 
-      <div class="timeline">
+      <div class="timeline-group">
+        <h3 class="timeline-title">Työkokemus</h3>
+        <div class="timeline">
 
         <article class="entry">
           <div class="entry-when">1.–7.6.2026<br>4 työpäivää</div>
@@ -891,6 +922,34 @@
         </article>
 
         <article class="entry">
+          <div class="entry-when">2025</div>
+          <div>
+            <h3>TET-harjoittelu ja kesätyö</h3>
+            <p class="org">Nuvoo Oy (Taitonetti.fi)</p>
+            <p class="meta">Tietokoneiden verkkokauppa</p>
+            <ul>
+              <li>Asiakaspalvelu ja laitemyynti.</li>
+              <li>Tietokoneiden ja komponenttien tuoteosaaminen.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-when">2024</div>
+          <div>
+            <h3>TET-harjoittelu ja kesätyö</h3>
+            <p class="org">School of Gaming Galactic Oy</p>
+          </div>
+        </article>
+
+        </div>
+      </div>
+
+      <div class="timeline-group">
+        <h3 class="timeline-title">Koulutus</h3>
+        <div class="timeline">
+
+        <article class="entry">
           <div class="entry-when">Opinnot<br>käynnissä</div>
           <div>
             <h3>Tieto- ja viestintätekniikan perustutkinto</h3>
@@ -905,18 +964,14 @@
         </article>
 
         <article class="entry">
-          <div class="entry-when">Oma projekti</div>
+          <div class="entry-when">2016–2025</div>
           <div>
-            <h3>Tietokoneiden kasaaminen ja myynti</h3>
-            <p class="org">Tori.fi</p>
-            <p class="meta">Kuvaukset, hinnoittelu ja asiakasviestintä</p>
-            <ul>
-              <li>Pelikoneiden kokoaminen komponenteista ja käyttöönotto.</li>
-              <li>Ilmoitusten tekeminen, hinnoittelu ja yhteydenpito ostajiin.</li>
-            </ul>
+            <h3>Peruskoulu</h3>
+            <p class="meta">Päättötodistus 2025</p>
           </div>
         </article>
 
+        </div>
       </div>
     </div>
   </section>
@@ -942,6 +997,19 @@
             <li>Unity</li><li>C#</li><li>WebGL</li><li>2D</li>
           </ul>
           <a class="card-link" href="Peli/Game.html" target="_blank" rel="noopener">Pelaa selaimessa <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <span class="card-icon" aria-hidden="true">▤</span>
+            <span class="badge">Oma projekti</span>
+          </div>
+          <h3>Pelikoneet ja konsolihuollot</h3>
+          <p>Kasaan uusista ja käytetyistä osista pelikoneita ja myyn niitä Tori.fi:ssä. Modaan Xbox 360 -konsoleita, huollan niiden ohjaimia sekä teen huoltoja muille konsoleille (esim. PS4).</p>
+          <ul class="chips">
+            <li>PC-kokoonpanot</li><li>Xbox 360</li><li>PS4</li><li>Huolto</li>
+          </ul>
+          <span class="card-link disabled">Tori.fi</span>
         </article>
 
         <article class="card">
@@ -989,6 +1057,9 @@
       </div>
 
       <div class="contact-actions">
+        <p class="contact-label">Puhelin</p>
+        <p class="phone">+358 XX XXXXXXX</p>
+
         <p class="contact-label">Sähköposti</p>
         <div class="email-row">
           <a class="email" href="mailto:touko.pelkonen@portfolio.fi">touko.pelkonen@portfolio.fi</a>
