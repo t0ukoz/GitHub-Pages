@@ -607,16 +607,26 @@
 
   .contact-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: clamp(28px, 5vw, 64px);
-    align-items: end;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 72px);
+    align-items: center;
   }
+
+  .contact-intro .section-head { margin-bottom: 20px; }
 
   .contact-lead {
     max-width: 44ch;
     margin: 0;
     color: var(--muted);
     font-size: 1.02rem;
+  }
+
+  .contact-label {
+    margin: 0 0 10px;
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
 
   .email-row {
@@ -967,15 +977,19 @@
   <!-- YHTEYS -->
   <section class="section" id="yhteys">
     <div class="wrap contact-grid">
-      <div>
+      <div class="contact-intro">
         <div class="section-head">
           <span class="section-num">04</span>
           <h2>Otetaan yhteyttä</h2>
         </div>
-        <p class="contact-lead" style="margin-bottom:24px;">
+        <p class="contact-lead">
           Onko sinulla kysyttävää projekteista, harjoittelusta tai yhteistyöstä?
           Laita viestiä – vastaan mielelläni.
         </p>
+      </div>
+
+      <div class="contact-actions">
+        <p class="contact-label">Sähköposti</p>
         <div class="email-row">
           <a class="email" href="mailto:touko.pelkonen@portfolio.fi">touko.pelkonen@portfolio.fi</a>
           <button class="copy-btn" type="button" data-copy="touko.pelkonen@portfolio.fi">Kopioi</button>
