@@ -1,863 +1,1046 @@
 <!DOCTYPE html>
 <html lang="fi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>t0ukoz | 2D palikkapeli & teknologia</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Touko Pelkonen — Portfolio</title>
+<meta name="description" content="Touko Pelkonen — tieto- ja viestintätekniikan opiskelija. Web- ja pelikehitystä, tietokonelaitteistoa ja työharjoittelu Vectoramalla 2026.">
+<meta name="theme-color" content="#0a0a0b">
+<meta property="og:title" content="Touko Pelkonen — Portfolio">
+<meta property="og:description" content="Tieto- ja viestintätekniikan opiskelija: web, pelit ja laitteisto.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a0b'/%3E%3Ctext x='16' y='23' font-family='system-ui,sans-serif' font-size='18' font-weight='700' fill='%23ffb454' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
 
-    <!-- CookieHub suostumus (manuaalinen asennus) -->
-    <script src="https://cdn.cookiehub.eu/c2/09afbc39.js"></script>
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function(event) {
-            var cpm = {};
-            window.cookiehub.load(cpm);
-        });
-    </script>
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --surface: #121214;
+    --surface-2: #17171a;
+    --border: #242428;
+    --text: #f4f4f5;
+    --muted: #a1a1aa;
+    --accent: #ffb454;
+    --accent-soft: rgba(255, 180, 84, .12);
+    --radius: 18px;
+    --wrap: 1080px;
+  }
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WT37GZQ8N8"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-WT37GZQ8N8');
-    </script>
+  * { box-sizing: border-box; }
 
-    <!-- Google Fonts & Font Awesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- GSAP & ScrollTrigger -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+    -webkit-text-size-adjust: 100%;
+  }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #0a0a1a;
-            color: #ffffff;
-            overflow-x: hidden;
-            line-height: 1.5;
-        }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
 
-        /* Canvas taustalle (node verkko + tähdet) */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            pointer-events: none;
-            display: block;
-        }
+  ::selection { background: var(--accent); color: #1a1206; }
 
-        /* gradient overlay pehmentää */
-        .overlay-grad {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 30% 40%, rgba(10,10,30,0.6), rgba(0,0,0,0.85));
-            z-index: -1;
-            pointer-events: none;
-        }
+  a { color: inherit; }
 
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 30px;
-            position: relative;
-            z-index: 5;
-        }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
 
-        /* header */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px 0;
-            background: rgba(5, 5, 20, 0.65);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 100, 200, 0.3);
-            z-index: 1000;
-            transition: 0.3s;
-        }
-        header.scrolled {
-            padding: 12px 0;
-            background: rgba(0, 0, 0, 0.85);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-        }
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-family: 'Space Grotesk', monospace;
-            text-align: left;
-            line-height: 1.2;
-        }
-        .logo .leet {
-            font-size: 1.9rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #FF4D6D, #FFB347, #4DFF9E);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -1px;
-        }
-        .logo .name {
-            font-size: 0.8rem;
-            display: block;
-            color: #aaa;
-            letter-spacing: normal;
-            font-weight: 500;
-        }
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-        }
-        .nav-links a {
-            color: #f0f0f0;
-            text-decoration: none;
-            font-weight: 500;
-            transition: 0.2s;
-            position: relative;
-        }
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #FF4D6D, #FFB347);
-            transition: 0.3s;
-        }
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        .menu-toggle {
-            display: none;
-            font-size: 1.6rem;
-            cursor: pointer;
-            color: #FFB347;
-        }
+  .wrap {
+    width: 100%;
+    max-width: var(--wrap);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
 
-        /* sectionit */
-        section {
-            padding: 100px 0;
-        }
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            text-align: center;
-        }
-        .hero-icon {
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 30px;
-            background: linear-gradient(145deg, rgba(255,77,109,0.2), rgba(77,255,158,0.2));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(255,180,70,0.6);
-            box-shadow: 0 0 30px rgba(255,77,109,0.3);
-            animation: floatGlow 3s infinite alternate;
-        }
-        .hero-icon i {
-            font-size: 3.8rem;
-            color: #FFB347;
-        }
-        @keyframes floatGlow {
-            0% { transform: translateY(0px); box-shadow: 0 0 10px rgba(255,77,109,0.3);}
-            100% { transform: translateY(-12px); box-shadow: 0 0 35px rgba(255,180,70,0.6);}
-        }
-        .hero h1 {
-            font-size: 4.2rem;
-            font-weight: 800;
-            background: linear-gradient(145deg, #FFF, #FFB347, #FF4D6D);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 1rem;
-        }
-        .tagline {
-            font-size: 1.5rem;
-            font-weight: 500;
-            background: linear-gradient(120deg, #FFB347, #4DFF9E);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .hero p {
-            max-width: 700px;
-            margin: 1.5rem auto;
-            color: #ccc;
-            font-size: 1.1rem;
-        }
-        .hero-buttons {
-            display: flex;
-            gap: 1.2rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #FF4D6D, #FFB347);
-            border: none;
-            padding: 12px 28px;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #0a0a1a;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(255,77,109,0.4);
-        }
-        .btn-outline-light {
-            background: transparent;
-            border: 2px solid #FFB347;
-            color: #FFB347;
-            padding: 12px 28px;
-            border-radius: 40px;
-            font-weight: bold;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.2s;
-        }
-        .btn-outline-light:hover {
-            background: #FFB347;
-            color: #0a0a1a;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 18px rgba(255,180,70,0.3);
-        }
+  .skip {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--accent);
+    color: #1a1206;
+    padding: 10px 16px;
+    z-index: 100;
+    font-weight: 600;
+  }
+  .skip:focus { left: 12px; top: 12px; }
 
-        /* yleiset otsikot */
-        .section-title {
-            font-size: 3rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #FFB347, #FF4D6D, #9B4DFF);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.02em;
-        }
+  /* ---------- Header ---------- */
 
-        /* kortit */
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        .glass-card {
-            background: rgba(20, 20, 45, 0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 32px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 180, 70, 0.3);
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            text-align: center;
-        }
-        .glass-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: #FFB347;
-            box-shadow: 0 20px 40px rgba(255,77,109,0.2);
-        }
-        .glass-card i {
-            font-size: 2.8rem;
-            background: linear-gradient(145deg, #FFB347, #FF4D6D);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 1rem;
-        }
-        .skill-category {
-            background: rgba(10, 10, 30, 0.7);
-            backdrop-filter: blur(8px);
-            border-radius: 28px;
-            padding: 1.8rem;
-            border: 1px solid rgba(77, 255, 158, 0.3);
-        }
-        .skill-bar {
-            background: #2a2a4a;
-            border-radius: 20px;
-            height: 8px;
-            overflow: hidden;
-            margin-top: 8px;
-        }
-        .skill-level {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #FFB347, #FF4D6D);
-            border-radius: 20px;
-        }
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10, 10, 11, .72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
 
-        /* projektikortit */
-        .project-card {
-            background: rgba(15, 15, 35, 0.75);
-            backdrop-filter: blur(12px);
-            border-radius: 32px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 180, 70, 0.4);
-            transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-        }
-        .project-card:hover {
-            transform: translateY(-8px);
-            border-color: #FF4D6D;
-            box-shadow: 0 25px 35px -12px rgba(255,77,109,0.3);
-        }
-        .project-status {
-            display: inline-block;
-            background: #FF4D6D;
-            color: #fff;
-            font-weight: bold;
-            padding: 6px 18px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            margin: 20px 0 0 24px;
-            align-self: flex-start;
-        }
-        .project-content {
-            padding: 24px;
-            flex: 1;
-        }
-        .project-content h3 {
-            font-size: 1.7rem;
-            margin-bottom: 0.75rem;
-            background: linear-gradient(145deg, #FFB347, #FF4D6D);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .tech-tag {
-            background: rgba(255, 180, 70, 0.2);
-            border-radius: 40px;
-            padding: 4px 14px;
-            font-size: 0.8rem;
-            border: 1px solid #FFB347;
-            display: inline-block;
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: 68px;
+  }
 
-        /* iso peli nappi */
-        .game-play-btn {
-            background: linear-gradient(95deg, #FF4D6D, #FFB347);
-            border: none;
-            padding: 16px 20px;
-            border-radius: 60px;
-            font-weight: 800;
-            font-size: 1.1rem;
-            color: #0a0a1a;
-            width: 100%;
-            cursor: pointer;
-            transition: 0.25s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 20px;
-            box-shadow: 0 5px 18px rgba(255,77,109,0.5);
-        }
-        .game-play-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 28px #FF4D6D;
-            letter-spacing: 1px;
-        }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: -.01em;
+    white-space: nowrap;
+  }
 
-        /* contact */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
-            gap: 2.5rem;
-        }
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            margin-bottom: 25px;
-        }
-        .contact-icon {
-            width: 52px;
-            height: 52px;
-            background: rgba(255, 180, 70, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            color: #FFB347;
-        }
-        .form-control {
-            width: 100%;
-            background: rgba(30, 30, 55, 0.8);
-            border: 1px solid #FFB347;
-            padding: 12px 18px;
-            border-radius: 28px;
-            color: white;
-            margin-top: 6px;
-        }
+  .brand-mark {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: #1a1206;
+    font-weight: 800;
+    font-size: 15px;
+  }
 
-        footer {
-            text-align: center;
-            padding: 40px 0;
-            border-top: 1px solid rgba(255, 180, 70, 0.2);
-            margin-top: 40px;
-        }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    font-size: 14.5px;
+  }
 
-        .back-to-top {
-            position: fixed;
-            bottom: 28px;
-            right: 28px;
-            background: #FF4D6D;
-            width: 48px;
-            height: 48px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            transition: 0.2s;
-            z-index: 999;
-        }
+  .nav a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color .18s ease;
+  }
+  .nav a:hover { color: var(--text); }
 
-        @media (max-width: 850px) {
-            .nav-links {
-                position: fixed;
-                top: 75px;
-                left: -100%;
-                width: 100%;
-                background: rgba(0,0,0,0.95);
-                flex-direction: column;
-                align-items: center;
-                padding: 2rem;
-                gap: 1.5rem;
-                transition: 0.3s;
-            }
-            .nav-links.active { left: 0; }
-            .menu-toggle { display: block; }
-            .hero h1 { font-size: 2.5rem; }
-            .section-title { font-size: 2.2rem; }
-        }
-    </style>
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* ---------- Buttons ---------- */
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #1a1206;
+  }
+  .btn-primary:hover { background: #ffc477; }
+
+  .btn-ghost {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text);
+  }
+  .btn-ghost:hover { border-color: #3a3a40; background: var(--surface); }
+
+  .btn-small {
+    padding: 8px 16px;
+    font-size: 14px;
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text);
+  }
+  .btn-small:hover { background: var(--surface); border-color: #3a3a40; }
+
+  .menu-btn {
+    display: none;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .menu-btn span {
+    display: block;
+    width: 16px;
+    height: 1.5px;
+    background: currentColor;
+    position: relative;
+  }
+  .menu-btn span::before,
+  .menu-btn span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 16px;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform .2s ease, top .2s ease;
+  }
+  .menu-btn span::before { top: -5px; }
+  .menu-btn span::after { top: 5px; }
+  .menu-btn[aria-expanded="true"] span { background: transparent; }
+  .menu-btn[aria-expanded="true"] span::before { top: 0; transform: rotate(45deg); }
+  .menu-btn[aria-expanded="true"] span::after { top: 0; transform: rotate(-45deg); }
+
+  .mobile-nav {
+    display: none;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .mobile-nav.open { display: block; }
+  .mobile-nav a {
+    display: block;
+    padding: 14px 24px;
+    color: var(--muted);
+    text-decoration: none;
+    border-top: 1px solid var(--border);
+  }
+  .mobile-nav a:hover { color: var(--text); }
+
+  /* ---------- Hero ---------- */
+
+  .hero {
+    padding: clamp(56px, 11vw, 120px) 0 clamp(48px, 8vw, 96px);
+    position: relative;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: -20% 40% 30% -10%;
+    background: radial-gradient(closest-side, rgba(255, 180, 84, .10), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, .8fr);
+    gap: clamp(32px, 6vw, 72px);
+    align-items: end;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 22px;
+    font-size: 13px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+    flex: none;
+  }
+
+  h1 {
+    margin: 0 0 24px;
+    font-size: clamp(3rem, 9vw, 6rem);
+    line-height: .96;
+    letter-spacing: -.045em;
+    font-weight: 650;
+  }
+
+  .lead {
+    max-width: 46ch;
+    margin: 0 0 32px;
+    font-size: clamp(1rem, 1.6vw, 1.125rem);
+    color: #d4d4d8;
+  }
+
+  .lead strong { color: var(--text); font-weight: 600; }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .hero-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 6px 22px;
+  }
+
+  .hero-card dl { margin: 0; }
+
+  .hero-card .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14.5px;
+  }
+  .hero-card .row:last-child { border-bottom: 0; }
+
+  .hero-card dt { color: var(--muted); }
+  .hero-card dd { margin: 0; text-align: right; font-weight: 500; }
+
+  /* ---------- Sections ---------- */
+
+  section { position: relative; }
+
+  .section {
+    padding: clamp(56px, 8vw, 104px) 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+
+  .section-num {
+    font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: .04em;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(1.6rem, 3.4vw, 2.35rem);
+    line-height: 1.15;
+    letter-spacing: -.03em;
+    font-weight: 600;
+  }
+
+  .section-intro {
+    max-width: 62ch;
+    margin: -28px 0 44px;
+    color: var(--muted);
+  }
+
+  /* ---------- About ---------- */
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 6vw, 72px);
+  }
+
+  .about-text p { margin: 0 0 18px; color: #d4d4d8; }
+  .about-text p:last-child { margin-bottom: 0; }
+
+  .skills {
+    display: grid;
+    gap: 22px;
+  }
+
+  .skill-group h3 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .chips li {
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    font-size: 13.5px;
+    color: #d4d4d8;
+  }
+
+  /* ---------- Timeline ---------- */
+
+  .timeline {
+    display: grid;
+    gap: 0;
+  }
+
+  .entry {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 44px);
+    padding: 30px 0;
+    border-top: 1px solid var(--border);
+  }
+  .entry:first-child { border-top: 0; padding-top: 0; }
+  .entry:last-child { padding-bottom: 0; }
+
+  .entry-when {
+    font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    padding-top: 4px;
+  }
+
+  .entry h3 {
+    margin: 0 0 4px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -.01em;
+  }
+
+  .entry .org {
+    margin: 0 0 6px;
+    color: var(--accent);
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+
+  .entry .meta {
+    margin: 0 0 16px;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+
+  .entry ul {
+    margin: 0 0 4px;
+    padding-left: 18px;
+    color: #d4d4d8;
+    font-size: 15px;
+  }
+  .entry ul li { margin-bottom: 5px; }
+  .entry ul li::marker { color: #52525b; }
+
+  /* Accordion */
+
+  details {
+    margin-top: 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  summary {
+    padding: 13px 18px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #d4d4d8;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  summary::-webkit-details-marker { display: none; }
+
+  summary::after {
+    content: "+";
+    font-size: 18px;
+    line-height: 1;
+    color: var(--accent);
+    transition: transform .2s ease;
+  }
+  details[open] summary::after { transform: rotate(45deg); }
+  summary:hover { background: var(--surface-2); }
+
+  .diary {
+    border-top: 1px solid var(--border);
+    padding: 6px 20px 18px;
+  }
+
+  .diary-day { padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .diary-day:last-child { border-bottom: 0; }
+
+  .diary-day h4 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+  .diary-day h4 span {
+    color: var(--muted);
+    font-weight: 400;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 12.5px;
+    margin-left: 8px;
+  }
+
+  .diary-day p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ---------- Projects ---------- */
+
+  .projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    transition: border-color .2s ease, transform .2s ease, background .2s ease;
+  }
+  .card:hover {
+    border-color: #3a3a40;
+    background: var(--surface-2);
+    transform: translateY(-2px);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .card-icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 17px;
+  }
+
+  .badge {
+    font-size: 11.5px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px 10px;
+    white-space: nowrap;
+  }
+
+  .card h3 {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: -.01em;
+  }
+
+  .card p {
+    margin: 0 0 18px;
+    color: var(--muted);
+    font-size: 14.5px;
+    line-height: 1.65;
+  }
+
+  .card .chips { margin-bottom: 20px; }
+  .card .chips li { font-size: 12.5px; padding: 4px 10px; background: transparent; }
+
+  .card-link {
+    margin-top: auto;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: gap .18s ease, border-color .18s ease;
+  }
+  .card-link:hover { gap: 11px; border-color: var(--accent); }
+
+  .card-link.disabled { color: var(--muted); cursor: default; }
+  .card-link.disabled:hover { gap: 7px; border-color: transparent; }
+
+  /* ---------- Contact ---------- */
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: end;
+  }
+
+  .contact-lead {
+    max-width: 44ch;
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.02rem;
+  }
+
+  .email-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 26px;
+  }
+
+  .email {
+    font-size: clamp(1.05rem, 2.6vw, 1.5rem);
+    font-weight: 600;
+    letter-spacing: -.02em;
+    text-decoration: none;
+    border-bottom: 1px solid #3a3a40;
+    padding-bottom: 2px;
+    transition: border-color .18s ease, color .18s ease;
+  }
+  .email:hover { color: var(--accent); border-color: var(--accent); }
+
+  .copy-btn {
+    font: inherit;
+    font-size: 12.5px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+  }
+  .copy-btn:hover { color: var(--text); border-color: #3a3a40; }
+
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* ---------- Footer ---------- */
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 26px 0;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--text); }
+
+  /* ---------- Responsive ---------- */
+
+  @media (max-width: 880px) {
+    .hero-grid { grid-template-columns: 1fr; align-items: start; }
+    .hero-card { max-width: 460px; }
+    .about-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; align-items: start; }
+  }
+
+  @media (max-width: 720px) {
+    .nav { display: none; }
+    .menu-btn { display: inline-flex; }
+    .entry { grid-template-columns: 1fr; gap: 10px; }
+    .entry-when { padding-top: 0; }
+    .header-actions .btn-small { display: none; }
+  }
+
+  @media (max-width: 360px) {
+    .brand span:last-child { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      transition-duration: .001ms !important;
+    }
+  }
+
+  @media print {
+    .site-header, .mobile-nav, .hero-actions, .contact-links, footer, .copy-btn { display: none !important; }
+    body { background: #fff; color: #111; }
+    .section { border-color: #ddd; }
+    .card, .hero-card, details { border-color: #ddd; background: #fff; }
+  }
+</style>
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
-<div class="overlay-grad"></div>
-<div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
+<a class="skip" href="#main">Siirry sisältöön</a>
 
-<header id="header">
-    <div class="container">
-        <nav class="nav-container">
-            <div class="logo">
-                <span class="leet">t0ukoz</span>
-                <span class="name">Touko Pelkonen</span>
-            </div>
-            <div class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></div>
-            <div class="nav-links" id="navLinks">
-                <a href="#home">ETUSIVU</a>
-                <a href="#about">MINUSTA</a>
-                <a href="#skills">TAIDOT</a>
-                <a href="#projects">PROJEKTIT</a>
-                <a href="#contact">YHTEYS</a>
-            </div>
-        </nav>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true">T</span>
+      <span>Touko Pelkonen</span>
+    </a>
+
+    <nav class="nav" aria-label="Päävalikko">
+      <a href="#minusta">Minusta</a>
+      <a href="#kokemus">Kokemus</a>
+      <a href="#projektit">Projektit</a>
+      <a href="#yhteys">Yhteys</a>
+    </nav>
+
+    <div class="header-actions">
+      <a class="btn btn-small" href="Toukon%20cv.pdf" download>Lataa CV</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Avaa valikko">
+        <span></span>
+      </button>
     </div>
+  </div>
+
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="#minusta">Minusta</a>
+    <a href="#kokemus">Kokemus</a>
+    <a href="#projektit">Projektit</a>
+    <a href="#yhteys">Yhteys</a>
+    <a href="Toukon%20cv.pdf" download>Lataa CV</a>
+  </div>
 </header>
 
-<main>
-    <section class="hero" id="home">
-        <div class="container">
-            <div class="hero-icon"><i class="fas fa-gamepad"></i></div>
-            <div class="tagline">✨ ohjelmistokehitys • pelinkehitys • 2D palikkaseikkailu ✨</div>
-            <h1>Touko Pelkonen</h1>
-            <p>Ensimmäisen vuoden ohjelmistokehityksen opiskelija <a href="https://www.osao.fi" target="_blank" style="color:#FFB347; text-decoration:none;">OSAOssa</a>, intohimoinen teknologiasta, tietokoneiden kasaamisesta ja uniikkien pelikokemusten luomisesta. Myyn kasattuja koneita Tori.fi-palvelussa ja kehitän omaa 2D selviytymispeliä, jossa voit tuhota ja asettaa palikoita vapaasti!</p>
-            <div class="hero-buttons">
-                <a href="#projects" class="btn-primary"><i class="fas fa-rocket"></i> Tutki projekteja</a>
-                <a href="#contact" class="btn-outline-light"><i class="fas fa-paper-plane"></i> Ota yhteyttä</a>
-                <button id="heroCvBtn" class="btn-outline-light" style="cursor:pointer;"><i class="fas fa-file-pdf"></i> Lataa CV</button>
-            </div>
-        </div>
-    </section>
+<main id="main">
 
-    <section id="about">
-        <div class="container">
-            <h2 class="section-title">// Minusta</h2>
-            <div class="grid-3">
-                <div class="glass-card"><i class="fas fa-graduation-cap"></i><h3>Opiskelija</h3><p>Opiskelen ensimmäistä vuotta <a href="https://www.osao.fi" target="_blank" style="color:#FFB347;">OSAOssa</a> ohjelmistokehittäjäksi. Opinnoissa web-teknologiat, algoritmit ja pelimekaniikat.</p></div>
-                <div class="glass-card"><i class="fas fa-laptop-code"></i><h3>Ohjelmointi</h3><p>HTML/CSS, JavaScript, React perusteet. Opettelen Unitya ja C#:ää omaa peliä varten.</p></div>
-                <div class="glass-card"><i class="fas fa-microchip"></i><h3>Laitteistot & Tori.fi</h3><p>Kasaan tietokoneita, myyn niitä menestyksekkäästi Tori.fi:ssä. Ymmärrän raudan ja optimoinnin.</p></div>
-            </div>
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Tieto- ja viestintätekniikka · OSAO</p>
+        <h1>Touko<br>Pelkonen</h1>
+        <p class="lead">
+          Opiskelen tieto- ja viestintätekniikkaa ja rakennan mielelläni kaikkea
+          selaimessa pyörivästä pelistä kasattuun pelikoneeseen. Kesällä 2026 olin
+          työharjoittelussa <strong>Vectoramalla</strong>, jossa hoidin tapahtuman
+          IT-tehtäviä ja asiakaspalvelua.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projektit">Katso projektit</a>
+          <a class="btn btn-ghost" href="Toukon%20cv.pdf" download>Lataa CV (PDF)</a>
         </div>
-    </section>
+      </div>
 
-    <section id="skills">
-        <div class="container">
-            <h2 class="section-title">// Teknologiat</h2>
-            <div class="grid-3">
-                <div class="skill-category"><h3><i class="fab fa-html5"></i> Web dev</h3><div class="skill-item"><span>HTML/CSS</span><div class="skill-bar"><div class="skill-level" style="width:75%"></div></div></div><div class="skill-item"><span>JavaScript</span><div class="skill-bar"><div class="skill-level" style="width:65%"></div></div></div><div class="skill-item"><span>React (op.)</span><div class="skill-bar"><div class="skill-level" style="width:50%"></div></div></div></div>
-                <div class="skill-category"><h3><i class="fas fa-gamepad"></i> Pelinkehitys</h3><div class="skill-item"><span>Unity/C#</span><div class="skill-bar"><div class="skill-level" style="width:60%"></div></div></div><div class="skill-item"><span>2D fysiikat</span><div class="skill-bar"><div class="skill-level" style="width:70%"></div></div></div><div class="skill-item"><span>Game design</span><div class="skill-bar"><div class="skill-level" style="width:75%"></div></div></div></div>
-                <div class="skill-category"><h3><i class="fas fa-tools"></i> Työkalut</h3><div class="skill-item"><span>Git/GitHub</span><div class="skill-bar"><div class="skill-level" style="width:70%"></div></div></div><div class="skill-item"><span>VS Code</span><div class="skill-bar"><div class="skill-level" style="width:85%"></div></div></div><div class="skill-item"><span>Blender</span><div class="skill-bar"><div class="skill-level" style="width:40%"></div></div></div></div>
-            </div>
+      <aside class="hero-card" aria-label="Nopeat tiedot">
+        <dl>
+          <div class="row"><dt>Opiskelu</dt><dd>OSAO · TK-perustutkinto</dd></div>
+          <div class="row"><dt>Harjoittelu</dt><dd>Vectorama 2026</dd></div>
+          <div class="row"><dt>Painopiste</dt><dd>Web &amp; pelikehitys</dd></div>
+          <div class="row"><dt>GitHub</dt><dd>@t0ukoz</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <!-- MINUSTA -->
+  <section class="section" id="minusta">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <h2>Minusta</h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-text">
+          <p>
+            Olen toisen asteen opiskelija, jota kiinnostavat erityisesti
+            web-teknologiat, pelinkehitys ja tietokonelaitteisto. Tykkään tehdä
+            asioita alusta loppuun: suunnitella, toteuttaa ja viimeistellä.
+          </p>
+          <p>
+            Vapaa-ajalla kokoan ja myyn tietokoneita sekä ylläpidän
+            Minecraft-serveriä. Työharjoittelussa Vectoramalla pääsin näkemään,
+            miltä IT-työ tapahtumaympäristössä näyttää – mattojen teippauksesta
+            verkkokaapelointiin ja asiakaspalveluun.
+          </p>
         </div>
-    </section>
 
-    <section id="projects">
-        <div class="container">
-            <h2 class="section-title">// Projektit</h2>
-            <div class="grid-3" id="projectsGrid"></div>
+        <div class="skills">
+          <div class="skill-group">
+            <h3>Web</h3>
+            <ul class="chips">
+              <li>HTML</li><li>CSS</li><li>JavaScript</li><li>React (perusteet)</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>Pelit</h3>
+            <ul class="chips">
+              <li>Unity</li><li>C#</li><li>2D-fysiikka</li><li>WebGL</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>Laitteisto</h3>
+            <ul class="chips">
+              <li>PC-kokoonpanot</li><li>Komponentit</li><li>Käyttöönotto</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>Työkalut</h3>
+            <ul class="chips">
+              <li>Git</li><li>GitHub</li><li>VS Code</li><li>Blender</li>
+            </ul>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <section id="contact">
-        <div class="container">
-            <h2 class="section-title">// Ota yhteyttä</h2>
-            <div class="contact-grid">
-                <div>
-                    <div class="contact-item"><div class="contact-icon"><i class="fas fa-envelope"></i></div><div><h3>Sähköposti</h3><p>touko.pelkonen@portfolio.fi</p></div></div>
-                    <div class="contact-item"><div class="contact-icon"><i class="fas fa-store"></i></div><div><h3>Tori.fi-kauppa</h3><p>Myyn tehokkaita pelikoneita</p></div></div>
-                    <div class="social-links" style="display: flex; gap: 20px; margin-top: 20px;">
-                        <a href="#" class="social-link" style="background:#2a2a4a; width:44px;height:44px; border-radius:50%; display:flex; align-items:center;justify-content:center;"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-link" style="background:#2a2a4a; width:44px;height:44px; border-radius:50%; display:flex; align-items:center;justify-content:center;"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="social-link" style="background:#2a2a4a; width:44px;height:44px; border-radius:50%; display:flex; align-items:center;justify-content:center;"><i class="fab fa-twitter"></i></a>
-                    </div>
+  <!-- KOKEMUS -->
+  <section class="section" id="kokemus">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <h2>Kokemus</h2>
+      </div>
+
+      <div class="timeline">
+
+        <article class="entry">
+          <div class="entry-when">1.–7.6.2026<br>4 työpäivää</div>
+          <div>
+            <h3>Työharjoittelu — Vectorama</h3>
+            <p class="org">VECTOR – Suomen verkkopeliyhdistys ry</p>
+            <p class="meta">Koulutussopimus · 37,5 h / viikko · toteutunut 38,5 h</p>
+            <ul>
+              <li>Tapahtumaloganistiikka: messumattojen asennus ja teippaus, kalusteiden sijoittelu ja tilojen viimeistely.</li>
+              <li>IT-tehtävät: All-in-one-pöytien purku ja käyttöönotto, pelien ja ajureiden asennus, valokuitukaapelointi.</li>
+              <li>Asiakaspalvelu ja päivän aikana vastaan tulleet juoksevat tehtävät.</li>
+              <li>Minecraft-admin Game-tiimissä: survival-serverin spawn, säännöt ja yhteisön peluuttaminen (n. 12 h ennen tapahtumaa).</li>
+            </ul>
+
+            <details>
+              <summary>Työharjoittelupäiväkirja</summary>
+              <div class="diary">
+                <div class="diary-day">
+                  <h4>Maanantai 1.6. <span>8,5 h</span></h4>
+                  <p>Perehdytys tiiminvetäjän kanssa. Tavaroiden purku ja siirto hallille väliaikaisille paikoille, pöytien kasausta sekä näyttöjen ja tuolien siirtelyä. Iltapäivällä tapahtumakoneisiin asennettiin sovellukset, pelit ja ajurit.</p>
                 </div>
-                <div class="glass-card" style="padding: 2rem;">
-                    <form id="contactForm">
-                        <div class="form-group"><label>Nimi</label><input type="text" class="form-control" id="name" required></div>
-                        <div class="form-group"><label>Sähköposti</label><input type="email" class="form-control" id="email" required></div>
-                        <div class="form-group"><label>Viesti</label><textarea class="form-control" rows="3" id="message" required></textarea></div>
-                        <button type="submit" class="btn-primary" style="width:100%;"><i class="fas fa-paper-plane"></i> Lähetä</button>
-                    </form>
+                <div class="diary-day">
+                  <h4>Tiistai 2.6. <span>9 h</span></h4>
+                  <p>Messumattojen kantaminen paikoilleen ja ylimääräisten mattojen siistiminen. Mattojen teippaus lattiaan ja saumojen limittäminen. Valokuitukaapelin veto ”nakkikioskille”, All-in-one-pöytien purku ja käyttöönotto sekä pelien lataus ja päivitys. Kotona vielä Minecraft-spawnin viimeistelyä.</p>
                 </div>
-            </div>
+                <div class="diary-day">
+                  <h4>Keskiviikko 3.6. <span>9 h</span></h4>
+                  <p>Edellisen päivän mattojen viimeistely: reunojen teippaus ja turvallisuuden tarkistus. Jääkaappien puhdistus sekä viimeisten pöytärivien päällystäminen suojapaperilla. Pieniä tehtäviä: tuolien siirtoa, verkkokaapeleita ja valot striimikorneriin. Lisäksi omien pelikamppeiden asettelu, ”Live”-palaveri game-tiimin kanssa ja nyyppäkierros.</p>
+                </div>
+                <div class="diary-day">
+                  <h4>Ennen tapahtumaa 15.5. <span>n. 12 h</span></h4>
+                  <p>Minecraft-adminina Game-tiimissä: survival-serverin spawnin suunnittelu ja rakentaminen, creative- ja survival-sääntöjen kirjoittaminen sekä säännölliset ryhmäpalaverit tiimin kanssa.</p>
+                </div>
+              </div>
+            </details>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-when">Opinnot<br>käynnissä</div>
+          <div>
+            <h3>Tieto- ja viestintätekniikan perustutkinto</h3>
+            <p class="org">OSAO</p>
+            <p class="meta">Toinen aste</p>
+            <ul>
+              <li>Web-teknologiat ja ohjelmoinnin perusteet.</li>
+              <li>Pelinkehitys Unitylla ja C#:lla.</li>
+              <li>Tietokonelaitteistot ja tietoverkot.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-when">Oma projekti</div>
+          <div>
+            <h3>Tietokoneiden kasaaminen ja myynti</h3>
+            <p class="org">Tori.fi</p>
+            <p class="meta">Kuvaukset, hinnoittelu ja asiakasviestintä</p>
+            <ul>
+              <li>Pelikoneiden kokoaminen komponenteista ja käyttöönotto.</li>
+              <li>Ilmoitusten tekeminen, hinnoittelu ja yhteydenpito ostajiin.</li>
+            </ul>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJEKTIT -->
+  <section class="section" id="projektit">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <h2>Projektit</h2>
+      </div>
+
+      <div class="projects">
+
+        <article class="card">
+          <div class="card-top">
+            <span class="card-icon" aria-hidden="true">▦</span>
+            <span class="badge">Early access</span>
+          </div>
+          <h3>2D-palikkapeli</h3>
+          <p>Selviytymis- ja rakentelupeli selaimessa. Tuhoa ja aseta palikoita vapaasti – projekti on vielä kehitysvaiheessa, mutta pelattavissa.</p>
+          <ul class="chips">
+            <li>Unity</li><li>C#</li><li>WebGL</li><li>2D</li>
+          </ul>
+          <a class="card-link" href="Peli/Game.html" target="_blank" rel="noopener">Pelaa selaimessa <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <span class="card-icon" aria-hidden="true">◇</span>
+            <span class="badge">Julkaistu</span>
+          </div>
+          <h3>Tämä portfoliosivusto</h3>
+          <p>Yksi HTML-tiedosto, ei ulkoisia riippuvuuksia tai seurantaskriptejä. Responsiivinen ulkoasu ja nopea latautuminen myös puhelimella.</p>
+          <ul class="chips">
+            <li>HTML</li><li>CSS</li><li>JavaScript</li>
+          </ul>
+          <span class="card-link disabled">Näet sen juuri nyt</span>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <span class="card-icon" aria-hidden="true">▣</span>
+            <span class="badge">2026</span>
+          </div>
+          <h3>Vectorama Minecraft</h3>
+          <p>Survival-serverin spawn, säännöt ja adminointi osana Vectoraman game-tiimiä. Suunnittelu ja rakentaminen tehtiin ennen tapahtumaa.</p>
+          <ul class="chips">
+            <li>Minecraft</li><li>Server admin</li><li>Yhteisö</li>
+          </ul>
+          <span class="card-link disabled">Osa työharjoittelua</span>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- YHTEYS -->
+  <section class="section" id="yhteys">
+    <div class="wrap contact-grid">
+      <div>
+        <div class="section-head">
+          <span class="section-num">04</span>
+          <h2>Otetaan yhteyttä</h2>
         </div>
-    </section>
+        <p class="contact-lead" style="margin-bottom:24px;">
+          Onko sinulla kysyttävää projekteista, harjoittelusta tai yhteistyöstä?
+          Laita viestiä – vastaan mielelläni.
+        </p>
+        <div class="email-row">
+          <a class="email" href="mailto:touko.pelkonen@portfolio.fi">touko.pelkonen@portfolio.fi</a>
+          <button class="copy-btn" type="button" data-copy="touko.pelkonen@portfolio.fi">Kopioi</button>
+        </div>
+        <div class="contact-links">
+          <a class="btn btn-primary" href="mailto:touko.pelkonen@portfolio.fi">Lähetä sähköposti</a>
+          <a class="btn btn-ghost" href="https://github.com/t0ukoz" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn btn-ghost" href="Toukon%20cv.pdf" download>Lataa CV</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer>
-    <div class="container">
-        <p>© 2025 Touko Pelkonen – Ohjelmistokehityksen opiskelija OSAOssa | Tietokoneiden kasaaja & Tori.fi-myyjä | 2D palikkapeli (tuhoa & rakenna)</p>
-    </div>
+  <div class="wrap footer-inner">
+    <span>© <span data-year>2026</span> Touko Pelkonen</span>
+    <span>Rakennettu käsin – HTML, CSS ja vähän JavaScriptiä.</span>
+    <a href="#top">Takaisin ylös ↑</a>
+  </div>
 </footer>
 
 <script>
-    (function() {
-        // --- PARANNELTU TAUSTA: ENEMMÄN NODEJA, KIRKKAAMMAT, TÄHDET HIMMEÄMPIÄ ---
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let nodes = [];
-        let stars = [];
-        let scrollY = 0;
-        let mouseX = -1000, mouseY = -1000;
-        
-        const NODE_COUNT = 110;
-        const EDGE_DISTANCE = 200;
-        const STAR_COUNT = 350;
-        const MOUSE_REPULSE_RADIUS = 140;
-        const MOUSE_FORCE = 1.0;
-        
-        function initNodes() {
-            nodes = [];
-            for (let i = 0; i < NODE_COUNT; i++) {
-                nodes.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.35,
-                    vy: (Math.random() - 0.5) * 0.35,
-                    radius: 3 + Math.random() * 4.5
-                });
-            }
-        }
-        
-        function initStars() {
-            stars = [];
-            for (let i = 0; i < STAR_COUNT; i++) {
-                stars.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    size: 0.8 + Math.random() * 1.8,
-                    alpha: 0.2 + Math.random() * 0.35,
-                    speed: 0.03 + Math.random() * 0.1
-                });
-            }
-        }
-        
-        function updateNodes() {
-            for (let node of nodes) {
-                const dx = node.x - mouseX;
-                const dy = node.y - mouseY;
-                const dist = Math.hypot(dx, dy);
-                if (dist < MOUSE_REPULSE_RADIUS && dist > 0.01) {
-                    const force = (MOUSE_REPULSE_RADIUS - dist) / MOUSE_REPULSE_RADIUS * MOUSE_FORCE;
-                    const angle = Math.atan2(dy, dx);
-                    const pushX = Math.cos(angle) * force;
-                    const pushY = Math.sin(angle) * force;
-                    node.vx += pushX;
-                    node.vy += pushY;
-                }
-                
-                node.x += node.vx;
-                node.y += node.vy;
-                node.vx *= 0.99;
-                node.vy *= 0.99;
-                
-                if (node.x < -100) node.x = width + 100;
-                if (node.x > width + 100) node.x = -100;
-                if (node.y < -100) node.y = height + 100;
-                if (node.y > height + 100) node.y = -100;
-            }
-        }
-        
-        function draw() {
-            if (!ctx) return;
-            ctx.clearRect(0, 0, width, height);
-            
-            // Tähdet (himmeät)
-            for (let star of stars) {
-                let offsetY = scrollY * 0.08 * star.speed;
-                let yPos = (star.y + offsetY) % height;
-                if (yPos < 0) yPos += height;
-                ctx.beginPath();
-                ctx.arc(star.x, yPos, star.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 210, 140, ${star.alpha * 0.5})`;
-                ctx.fill();
-                ctx.shadowBlur = 2;
-                ctx.shadowColor = "#FFB347";
-                ctx.fill();
-                ctx.shadowBlur = 0;
-            }
-            
-            // Viivat
-            for (let i = 0; i < nodes.length; i++) {
-                for (let j = i + 1; j < nodes.length; j++) {
-                    const dx = nodes[i].x - nodes[j].x;
-                    const dy = nodes[i].y - nodes[j].y;
-                    const dist = Math.hypot(dx, dy);
-                    if (dist < EDGE_DISTANCE) {
-                        const opacity = (1 - dist / EDGE_DISTANCE) * 0.65;
-                        ctx.beginPath();
-                        ctx.moveTo(nodes[i].x, nodes[i].y);
-                        ctx.lineTo(nodes[j].x, nodes[j].y);
-                        ctx.strokeStyle = `rgba(255, 180, 70, ${opacity})`;
-                        ctx.lineWidth = 1.5;
-                        ctx.stroke();
-                    }
-                }
-            }
-            
-            // Nodet (kirkkaat)
-            for (let node of nodes) {
-                ctx.beginPath();
-                ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 100, 140, 0.95)`;
-                ctx.fill();
-                ctx.shadowBlur = 12;
-                ctx.shadowColor = "#FF4D6D";
-                ctx.fill();
-                ctx.shadowBlur = 0;
-                ctx.beginPath();
-                ctx.arc(node.x, node.y, node.radius * 0.6, 0, Math.PI * 2);
-                ctx.fillStyle = "#FFB347";
-                ctx.fill();
-                ctx.shadowBlur = 6;
-                ctx.shadowColor = "#FFB347";
-                ctx.fill();
-                ctx.shadowBlur = 0;
-            }
-        }
-        
-        function animateBackground() {
-            if (!width || !height) return;
-            updateNodes();
-            draw();
-            requestAnimationFrame(animateBackground);
-        }
-        
-        function resizeCanvas() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-            initNodes();
-            initStars();
-        }
-        
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-        window.addEventListener('mouseleave', () => {
-            mouseX = -1000;
-            mouseY = -1000;
-        });
-        window.addEventListener('scroll', () => {
-            scrollY = window.scrollY;
-        });
-        
-        resizeCanvas();
-        animateBackground();
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-        });
-        
-        // --- PROJEKTI DATA (korjattu kuvaus) ---
-        const projectsData = [
-            {
-                title: "Portfolio - itse tehty (tekoälyä apuna)",
-                desc: "Tämä portfoliosivusto on rakennettu itse, hyödyntäen tekoälyä avustajana koodauksessa. Taustalla leijuva interaktiivinen node/viiva -verkko, GSAP-animaatiot ja responsiivinen design.",
-                tags: ["HTML5","CSS3","JS","Canvas","GSAP"],
-                status: "Valmis",
-                playableGame: false
-            },
-            {
-                title: "✨ 2D Seikkailu/Selviytymispeli – PALIKKAPELI ✨",
-                desc: "Oma peliprojektini: 2D sandbox jossa voit tuhota ja asettaa palikoita vapaasti! Seikkailu ja selviytyminen retrotyyliin. Peli on vasta alkuvaiheessa, mutta pelattavissa.",
-                tags: ["Unity","C#","WebGL","2D Physics"],
-                status: "Early Access",
-                playableGame: true,
-                gameUrl: "Peli/Game.html"
-            }
-        ];
-        
-        const projectsGrid = document.getElementById('projectsGrid');
-        function renderProjects() {
-            projectsGrid.innerHTML = '';
-            projectsData.forEach(proj => {
-                const card = document.createElement('div');
-                card.className = 'project-card';
-                let gameBtn = '';
-                if (proj.playableGame) {
-                    gameBtn = `<button class="game-play-btn" data-gameurl="${proj.gameUrl}"><i class="fas fa-dragon"></i> 🎮 PELAA 2D PALIKKAPELIÄ 🎮 <i class="fas fa-cubes"></i></button>`;
-                } else {
-                    gameBtn = `<div style="margin-top:20px;"><a href="#" class="project-link" style="color:#FFB347;"><i class="fas fa-globe"></i> Live Demo (tämä sivu)</a></div>`;
-                }
-                card.innerHTML = `
-                    <div class="project-status">${proj.status}</div>
-                    <div class="project-content">
-                        <h3>${proj.title}</h3>
-                        <p>${proj.desc}</p>
-                        <div>${proj.tags.map(t => `<span class="tech-tag">${t}</span>`).join('')}</div>
-                        ${gameBtn}
-                    </div>
-                `;
-                projectsGrid.appendChild(card);
-            });
-            
-            document.querySelectorAll('.game-play-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const url = btn.getAttribute('data-gameurl');
-                    if(url) window.open(url, '_blank');
-                    else alert("Pelitiedostoa ei löydy: varmista että kansio Peli/Game.html on olemassa!");
-                });
-            });
-        }
-        renderProjects();
-        
-        // CV lataus
-        function downloadCV() {
-            const link = document.createElement('a');
-            link.href = "Toukon cv.pdf";
-            link.download = "Toukon_cv.pdf";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-        const heroCvBtn = document.getElementById('heroCvBtn');
-        if(heroCvBtn) heroCvBtn.addEventListener('click', downloadCV);
-        
-        // Header scroll & back to top
-        const header = document.getElementById('header');
-        const backTop = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            if(window.scrollY > 60) header.classList.add('scrolled');
-            else header.classList.remove('scrolled');
-            if(window.scrollY > 400) backTop.style.opacity = '1';
-            else backTop.style.opacity = '0';
-        });
-        backTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
-        
-        // Mobile menu
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-times');
-        });
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                const icon = menuToggle.querySelector('i');
-                if(icon) icon.classList = 'fas fa-bars';
-            });
-        });
-        
-        // Contact form
-        const contactForm = document.getElementById('contactForm');
-        if(contactForm) {
-            contactForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                alert(`Kiitos viestistä! Olen yhteydessä mahdollisimman pian. - Touko`);
-                contactForm.reset();
-            });
-        }
-        
-        // Skill bar animaatio
-        const skillObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    const bars = entry.target.querySelectorAll('.skill-level');
-                    bars.forEach(bar => {
-                        const width = bar.style.width;
-                        bar.style.width = '0%';
-                        setTimeout(() => bar.style.width = width, 80);
-                    });
-                    skillObserver.unobserve(entry.target);
-                }
-            });
-        }, {threshold:0.4});
-        document.querySelectorAll('.skill-category').forEach(cat => skillObserver.observe(cat));
-        
-        // GSAP animaatiot
-        gsap.registerPlugin(ScrollTrigger);
-        gsap.utils.toArray('.glass-card, .skill-category, .project-card, .section-title').forEach(el => {
-            gsap.from(el, {
-                scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' },
-                opacity: 0,
-                y: 50,
-                duration: 0.7,
-                ease: 'power2.out'
-            });
-        });
-    })();
+  // Mobiilivalikko
+  const menuBtn = document.querySelector('.menu-btn');
+  const mobileNav = document.getElementById('mobile-nav');
+
+  if (menuBtn && mobileNav) {
+    menuBtn.addEventListener('click', () => {
+      const open = mobileNav.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtn.setAttribute('aria-label', open ? 'Sulje valikko' : 'Avaa valikko');
+    });
+
+    mobileNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+        menuBtn.setAttribute('aria-label', 'Avaa valikko');
+      });
+    });
+  }
+
+  // Vuosiluku
+  document.querySelectorAll('[data-year]').forEach(el => {
+    el.textContent = new Date().getFullYear();
+  });
+
+  // Sähköpostin kopiointi
+  const copyBtn = document.querySelector('[data-copy]');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', async () => {
+      const value = copyBtn.dataset.copy;
+      try {
+        await navigator.clipboard.writeText(value);
+        copyBtn.textContent = 'Kopioitu';
+        setTimeout(() => { copyBtn.textContent = 'Kopioi'; }, 1600);
+      } catch {
+        window.location.href = 'mailto:' + value;
+      }
+    });
+  }
+
 </script>
+
 </body>
 </html>
