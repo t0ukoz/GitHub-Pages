@@ -5,23 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Touko Pelkonen — Ohjelmistokehittäjä</title>
 <meta name="description" content="Touko Pelkonen — ohjelmistokehityksen opiskelija. Web- ja pelikehitystä, 50+ kasattua ja myytyä pelikonetta, Xbox 360 -modaukset ja työharjoittelu Vectoramalla 2026.">
-<meta name="theme-color" content="#0a0a0b">
+<meta name="theme-color" content="#f5f2ea">
 <meta property="og:title" content="Touko Pelkonen — Ohjelmistokehittäjä">
 <meta property="og:description" content="Ohjelmistokehityksen opiskelija: web, pelit ja laitteisto.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a0b'/%3E%3Ctext x='16' y='23' font-family='system-ui,sans-serif' font-size='18' font-weight='700' fill='%23ffb454' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%23181712'/%3E%3Ctext x='16' y='23' font-family='system-ui,sans-serif' font-size='18' font-weight='700' fill='%23f5f2ea' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
 
 <style>
   :root {
-    --bg: #0a0a0b;
-    --surface: #121214;
-    --surface-2: #17171a;
-    --border: #242428;
-    --text: #f4f4f5;
-    --muted: #a1a1aa;
-    --accent: #ffb454;
-    --accent-soft: rgba(255, 180, 84, .12);
-    --radius: 18px;
+    --bg: #f5f2ea;
+    --surface: #fffdf8;
+    --surface-2: #ece6d9;
+    --border: #d8d2c4;
+    --text: #181712;
+    --muted: #6c675c;
+    --accent: #a83f1d;
+    --accent-soft: #f1ded3;
+    --radius: 10px;
     --wrap: 1080px;
   }
 
@@ -29,7 +29,7 @@
 
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 88px;
+    scroll-padding-top: 84px;
     -webkit-text-size-adjust: 100%;
   }
 
@@ -44,14 +44,14 @@
     overflow-x: hidden;
   }
 
-  ::selection { background: var(--accent); color: #1a1206; }
+  ::selection { background: var(--accent); color: #fff8f2; }
 
   a { color: inherit; }
 
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: 2px;
   }
 
   .wrap {
@@ -66,7 +66,7 @@
     left: -9999px;
     top: 0;
     background: var(--accent);
-    color: #1a1206;
+    color: #fff8f2;
     padding: 10px 16px;
     z-index: 100;
     font-weight: 600;
@@ -79,9 +79,10 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(10, 10, 11, .72);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(245, 242, 234, .88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 3px solid var(--accent);
     border-bottom: 1px solid var(--border);
   }
 
@@ -90,7 +91,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    height: 68px;
+    height: 64px;
   }
 
   .brand {
@@ -107,19 +108,19 @@
     display: grid;
     place-items: center;
     width: 30px;
-    height: 30px;
-    border-radius: 9px;
-    background: var(--accent);
-    color: #1a1206;
-    font-weight: 800;
-    font-size: 15px;
+    height: 28px;
+    border-radius: 4px;
+    background: var(--text);
+    color: var(--bg);
+    font-size: 13px;
+    font-weight: 700;
   }
 
   .nav {
     display: flex;
     align-items: center;
-    gap: 28px;
-    font-size: 14.5px;
+    gap: 26px;
+    font-size: 14px;
   }
 
   .nav a {
@@ -127,7 +128,12 @@
     text-decoration: none;
     transition: color .18s ease;
   }
-  .nav a:hover { color: var(--text); }
+  .nav a:hover {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 5px;
+  }
 
   /* ---------- Buttons ---------- */
 
@@ -137,41 +143,39 @@
     justify-content: center;
     gap: 8px;
     padding: 12px 20px;
-    border-radius: 999px;
+    border-radius: 6px;
     border: 1px solid transparent;
     font: inherit;
-    font-size: 15px;
+    font-size: 14.5px;
     font-weight: 600;
     line-height: 1.2;
     text-decoration: none;
     cursor: pointer;
-    transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
+    transition: background .18s ease, border-color .18s ease, color .18s ease;
   }
-  .btn:hover { transform: translateY(-1px); }
-  .btn:active { transform: translateY(0); }
 
   .btn-primary {
     background: var(--accent);
-    color: #1a1206;
+    color: #fff8f2;
   }
-  .btn-primary:hover { background: #ffc477; }
+  .btn-primary:hover { background: #8d3416; }
 
   .btn-ghost {
     background: transparent;
     border-color: var(--border);
     color: var(--text);
   }
-  .btn-ghost:hover { border-color: #3a3a40; background: var(--surface); }
+  .btn-ghost:hover { border-color: var(--text); background: var(--surface); }
 
   .menu-btn {
     display: none;
     width: 40px;
-    height: 40px;
+    height: 38px;
     align-items: center;
     justify-content: center;
     background: transparent;
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 5px;
     color: var(--text);
     cursor: pointer;
   }
@@ -201,7 +205,7 @@
   .mobile-nav {
     display: none;
     border-bottom: 1px solid var(--border);
-    background: var(--bg);
+    background: var(--surface);
   }
   .mobile-nav.open { display: block; }
   .mobile-nav a {
@@ -216,25 +220,13 @@
   /* ---------- Hero ---------- */
 
   .hero {
-    padding: clamp(56px, 11vw, 120px) 0 clamp(48px, 8vw, 96px);
-    position: relative;
-  }
-
-  .hero::before {
-    content: "";
-    position: absolute;
-    inset: -20% 40% 30% -10%;
-    background: radial-gradient(closest-side, rgba(255, 180, 84, .10), transparent 70%);
-    pointer-events: none;
-    z-index: 0;
+    padding: clamp(56px, 10vw, 116px) 0 clamp(48px, 7vw, 88px);
   }
 
   .hero-grid {
-    position: relative;
-    z-index: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(280px, .8fr);
-    gap: clamp(32px, 6vw, 72px);
+    grid-template-columns: minmax(0, 1.4fr) minmax(270px, .72fr);
+    gap: clamp(32px, 6vw, 76px);
     align-items: end;
   }
 
@@ -243,34 +235,35 @@
     align-items: center;
     gap: 10px;
     margin: 0 0 22px;
-    font-size: 13px;
-    letter-spacing: .08em;
+    font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+    font-size: 11.5px;
+    letter-spacing: .12em;
     text-transform: uppercase;
     color: var(--muted);
   }
 
   .dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
+    width: 6px;
+    height: 6px;
+    border-radius: 1px;
     background: var(--accent);
-    box-shadow: 0 0 0 4px var(--accent-soft);
     flex: none;
   }
 
   h1 {
-    margin: 0 0 24px;
-    font-size: clamp(3rem, 9vw, 6rem);
-    line-height: .96;
+    margin: 0 0 26px;
+    font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+    font-size: clamp(3.3rem, 9.5vw, 6.6rem);
+    line-height: .94;
     letter-spacing: -.045em;
-    font-weight: 650;
+    font-weight: 500;
   }
 
   .lead {
-    max-width: 46ch;
+    max-width: 49ch;
     margin: 0 0 32px;
-    font-size: clamp(1rem, 1.6vw, 1.125rem);
-    color: #d4d4d8;
+    font-size: clamp(1rem, 1.6vw, 1.1rem);
+    color: #4f4a40;
   }
 
   .lead strong { color: var(--text); font-weight: 600; }
@@ -278,14 +271,12 @@
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
   }
 
   .hero-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 6px 22px;
+    border-top: 2px solid var(--text);
+    padding: 0;
   }
 
   .hero-card dl { margin: 0; }
@@ -294,13 +285,20 @@
     display: flex;
     justify-content: space-between;
     gap: 18px;
-    padding: 14px 0;
+    padding: 12px 0;
     border-bottom: 1px solid var(--border);
-    font-size: 14.5px;
+    font-size: 14px;
   }
   .hero-card .row:last-child { border-bottom: 0; }
 
-  .hero-card dt { color: var(--muted); }
+  .hero-card dt {
+    font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+    font-size: 10.5px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 2px;
+  }
   .hero-card dd { margin: 0; text-align: right; font-weight: 500; }
 
   /* ---------- Sections ---------- */
@@ -308,30 +306,39 @@
   section { position: relative; }
 
   .section {
-    padding: clamp(56px, 8vw, 104px) 0;
+    padding: clamp(56px, 8vw, 100px) 0;
     border-top: 1px solid var(--border);
   }
 
   .section-head {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 14px;
-    margin-bottom: clamp(32px, 5vw, 56px);
+    margin-bottom: clamp(32px, 5vw, 52px);
   }
 
   .section-num {
+    display: inline-grid;
+    place-items: center;
+    min-width: 30px;
+    height: 26px;
+    padding: 0 5px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface);
     font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
-    font-size: 13px;
+    font-size: 11px;
     color: var(--accent);
     letter-spacing: .04em;
   }
 
   h2 {
     margin: 0;
-    font-size: clamp(1.6rem, 3.4vw, 2.35rem);
+    font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+    font-size: clamp(1.8rem, 3.6vw, 2.55rem);
     line-height: 1.15;
-    letter-spacing: -.03em;
-    font-weight: 600;
+    letter-spacing: -.025em;
+    font-weight: 500;
   }
 
   .section-intro {
@@ -348,7 +355,7 @@
     gap: clamp(32px, 6vw, 72px);
   }
 
-  .about-text p { margin: 0 0 18px; color: #d4d4d8; }
+  .about-text p { margin: 0 0 18px; color: #4f4a40; }
   .about-text p:last-child { margin-bottom: 0; }
 
   .skills {
@@ -358,9 +365,10 @@
 
   .skill-group h3 {
     margin: 0 0 10px;
-    font-size: 13px;
+    font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+    font-size: 10.5px;
     font-weight: 600;
-    letter-spacing: .08em;
+    letter-spacing: .1em;
     text-transform: uppercase;
     color: var(--muted);
   }
@@ -368,19 +376,19 @@
   .chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 7px;
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
   .chips li {
-    padding: 5px 12px;
+    padding: 4px 10px;
     border: 1px solid var(--border);
-    border-radius: 999px;
+    border-radius: 4px;
     background: var(--surface);
-    font-size: 13.5px;
-    color: #d4d4d8;
+    font-size: 12.5px;
+    color: #4f4a40;
   }
 
   /* ---------- Timeline ---------- */
@@ -396,9 +404,10 @@
 
   .timeline-title {
     margin: 0 0 20px;
-    font-size: 12.5px;
+    font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+    font-size: 10.5px;
     font-weight: 600;
-    letter-spacing: .08em;
+    letter-spacing: .1em;
     text-transform: uppercase;
     color: var(--muted);
   }
@@ -415,7 +424,7 @@
 
   .entry-when {
     font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
-    font-size: 13px;
+    font-size: 12.5px;
     color: var(--muted);
     line-height: 1.5;
     padding-top: 4px;
@@ -423,95 +432,32 @@
 
   .entry h3 {
     margin: 0 0 4px;
-    font-size: 1.15rem;
-    font-weight: 600;
+    font-size: 1.12rem;
+    font-weight: 650;
     letter-spacing: -.01em;
   }
 
   .entry .org {
     margin: 0 0 6px;
     color: var(--accent);
-    font-size: 14.5px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
   }
 
   .entry .meta {
     margin: 0 0 16px;
     color: var(--muted);
-    font-size: 13.5px;
+    font-size: 13px;
   }
 
   .entry ul {
     margin: 0 0 4px;
     padding-left: 18px;
-    color: #d4d4d8;
+    color: #4f4a40;
     font-size: 15px;
   }
   .entry ul li { margin-bottom: 5px; }
-  .entry ul li::marker { color: #52525b; }
-
-  /* Accordion */
-
-  details {
-    margin-top: 18px;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    background: var(--surface);
-    overflow: hidden;
-  }
-
-  summary {
-    padding: 13px 18px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    color: #d4d4d8;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-  }
-  summary::-webkit-details-marker { display: none; }
-
-  summary::after {
-    content: "+";
-    font-size: 18px;
-    line-height: 1;
-    color: var(--accent);
-    transition: transform .2s ease;
-  }
-  details[open] summary::after { transform: rotate(45deg); }
-  summary:hover { background: var(--surface-2); }
-
-  .diary {
-    border-top: 1px solid var(--border);
-    padding: 6px 20px 18px;
-  }
-
-  .diary-day { padding: 14px 0; border-bottom: 1px solid var(--border); }
-  .diary-day:last-child { border-bottom: 0; }
-
-  .diary-day h4 {
-    margin: 0 0 6px;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: .01em;
-  }
-  .diary-day h4 span {
-    color: var(--muted);
-    font-weight: 400;
-    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-    font-size: 12.5px;
-    margin-left: 8px;
-  }
-
-  .diary-day p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.7;
-  }
+  .entry ul li::marker { color: #a39c8d; }
 
   /* ---------- Myynti ---------- */
 
@@ -525,7 +471,7 @@
 
   .sales-intro p {
     margin: 0 0 16px;
-    color: #d4d4d8;
+    color: #4f4a40;
   }
   .sales-intro p:last-child { margin-bottom: 0; }
 
@@ -551,27 +497,28 @@
 
   .sales-stats strong {
     min-width: 72px;
-    font-size: 1.65rem;
+    font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+    font-size: 1.7rem;
     font-weight: 600;
-    letter-spacing: -.03em;
+    letter-spacing: -.02em;
     color: var(--accent);
   }
 
   .sales-stats span {
-    font-size: 13.5px;
+    font-size: 13px;
     color: var(--muted);
   }
 
   .gallery-title {
     margin: 0 0 4px;
     font-size: 1.05rem;
-    font-weight: 600;
+    font-weight: 650;
     letter-spacing: -.01em;
   }
 
   .gallery-note {
     margin: 0 0 20px;
-    font-size: 13.5px;
+    font-size: 13px;
     color: var(--muted);
   }
 
@@ -586,18 +533,15 @@
   .sale-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: var(--radius);
     overflow: hidden;
-    transition: border-color .2s ease, transform .2s ease;
+    transition: border-color .2s ease;
   }
-  .sale-card:hover {
-    border-color: #3a3a40;
-    transform: translateY(-2px);
-  }
+  .sale-card:hover { border-color: var(--accent); }
 
   .sale-media {
     aspect-ratio: 3 / 4;
-    background: var(--surface);
+    background: var(--surface-2);
     overflow: hidden;
   }
 
@@ -608,7 +552,7 @@
     display: block;
     transition: transform .5s ease;
   }
-  .sale-card:hover .sale-media img { transform: scale(1.03); }
+  .sale-card:hover .sale-media img { transform: scale(1.025); }
 
   .sale-body { padding: 14px 16px 16px; }
 
@@ -617,14 +561,15 @@
     justify-content: space-between;
     gap: 10px;
     margin: 0 0 6px;
-    font-size: 12px;
+    font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+    font-size: 11px;
     color: var(--muted);
   }
 
   .sale-title {
     margin: 0 0 4px;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 650;
     letter-spacing: -.01em;
   }
 
@@ -662,13 +607,9 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 24px;
-    transition: border-color .2s ease, transform .2s ease, background .2s ease;
+    transition: border-color .2s ease;
   }
-  .card:hover {
-    border-color: #3a3a40;
-    background: var(--surface-2);
-    transform: translateY(-2px);
-  }
+  .card:hover { border-color: var(--accent); }
 
   .card-top {
     display: flex;
@@ -681,41 +622,42 @@
   .card-icon {
     display: grid;
     place-items: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 11px;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
     background: var(--accent-soft);
     color: var(--accent);
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .badge {
-    font-size: 11.5px;
-    letter-spacing: .05em;
+    font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+    font-size: 10px;
+    letter-spacing: .07em;
     text-transform: uppercase;
     color: var(--muted);
     border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 3px 10px;
+    border-radius: 4px;
+    padding: 3px 8px;
     white-space: nowrap;
   }
 
   .card h3 {
     margin: 0 0 8px;
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 650;
     letter-spacing: -.01em;
   }
 
   .card p {
     margin: 0 0 18px;
     color: var(--muted);
-    font-size: 14.5px;
+    font-size: 14px;
     line-height: 1.65;
   }
 
   .card .chips { margin-bottom: 20px; }
-  .card .chips li { font-size: 12.5px; padding: 4px 10px; background: transparent; }
+  .card .chips li { font-size: 12px; padding: 3px 9px; background: transparent; }
 
   .card-link {
     margin-top: auto;
@@ -723,7 +665,7 @@
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    font-size: 14.5px;
+    font-size: 14px;
     font-weight: 600;
     color: var(--accent);
     text-decoration: none;
@@ -735,83 +677,13 @@
   .card-link.disabled { color: var(--muted); cursor: default; }
   .card-link.disabled:hover { gap: 7px; border-color: transparent; }
 
-  /* ---------- Contact ---------- */
-
-  .contact-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-    gap: clamp(32px, 6vw, 72px);
-    align-items: center;
-  }
-
-  .contact-intro .section-head { margin-bottom: 20px; }
-
-  .contact-lead {
-    max-width: 44ch;
-    margin: 0;
-    color: var(--muted);
-    font-size: 1.02rem;
-  }
-
-  .contact-label {
-    margin: 0 0 10px;
-    font-size: 12px;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .phone {
-    margin: 0 0 26px;
-    font-size: 1.05rem;
-    font-weight: 500;
-  }
-
-  .email-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 26px;
-  }
-
-  .email {
-    font-size: clamp(1.05rem, 2.6vw, 1.5rem);
-    font-weight: 600;
-    letter-spacing: -.02em;
-    text-decoration: none;
-    border-bottom: 1px solid #3a3a40;
-    padding-bottom: 2px;
-    transition: border-color .18s ease, color .18s ease;
-  }
-  .email:hover { color: var(--accent); border-color: var(--accent); }
-
-  .copy-btn {
-    font: inherit;
-    font-size: 12.5px;
-    padding: 5px 11px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    transition: color .18s ease, border-color .18s ease;
-  }
-  .copy-btn:hover { color: var(--text); border-color: #3a3a40; }
-
-  .contact-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
   /* ---------- Footer ---------- */
 
   footer {
-    border-top: 1px solid var(--border);
-    padding: 26px 0;
-    font-size: 13.5px;
-    color: var(--muted);
+    background: var(--text);
+    padding: 32px 0;
+    font-size: 13px;
+    color: #c9c3b5;
   }
 
   .footer-inner {
@@ -822,8 +694,8 @@
     gap: 12px;
   }
 
-  footer a { color: var(--muted); text-decoration: none; }
-  footer a:hover { color: var(--text); }
+  footer a { color: #ece6d9; text-decoration: none; }
+  footer a:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
 
   /* ---------- Responsive ---------- */
 
@@ -831,7 +703,6 @@
     .hero-grid { grid-template-columns: 1fr; align-items: start; }
     .hero-card { max-width: 460px; }
     .about-grid { grid-template-columns: 1fr; }
-    .contact-grid { grid-template-columns: 1fr; align-items: start; }
     .sales-intro { grid-template-columns: 1fr; }
     .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
@@ -860,10 +731,10 @@
   }
 
   @media print {
-    .site-header, .mobile-nav, .hero-actions, .contact-links, footer, .copy-btn { display: none !important; }
+    .site-header, .mobile-nav, .hero-actions, footer { display: none !important; }
     body { background: #fff; color: #111; }
     .section { border-color: #ddd; }
-    .card, .hero-card, details { border-color: #ddd; background: #fff; }
+    .card, .hero-card, .sale-card { border-color: #ddd; background: #fff; }
   }
 </style>
 </head>
@@ -883,7 +754,6 @@
       <a href="#kokemus">Kokemus</a>
       <a href="#myynti">Myynti</a>
       <a href="#projektit">Projektit</a>
-      <a href="#yhteys">Yhteys</a>
     </nav>
 
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Avaa valikko">
@@ -896,7 +766,6 @@
     <a href="#kokemus">Kokemus</a>
     <a href="#myynti">Myynti</a>
     <a href="#projektit">Projektit</a>
-    <a href="#yhteys">Yhteys</a>
   </div>
 </header>
 
@@ -917,7 +786,7 @@
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#projektit">Katso projektit</a>
-          <a class="btn btn-ghost" href="#yhteys">Ota yhteyttä</a>
+          <a class="btn btn-ghost" href="#myynti">Katso myynti</a>
         </div>
       </div>
 
@@ -1017,28 +886,6 @@
               <li>Asiakaspalvelu ja päivän aikana vastaan tulleet juoksevat tehtävät.</li>
               <li>Minecraft-admin Game-tiimissä: survival-serverin spawn, säännöt ja yhteisön peluuttaminen (n. 12 h ennen tapahtumaa).</li>
             </ul>
-
-            <details>
-              <summary>Työharjoittelupäiväkirja</summary>
-              <div class="diary">
-                <div class="diary-day">
-                  <h4>Maanantai 1.6. <span>8,5 h</span></h4>
-                  <p>Perehdytys tiiminvetäjän kanssa. Tavaroiden purku ja siirto hallille väliaikaisille paikoille, pöytien kasausta sekä näyttöjen ja tuolien siirtelyä. Iltapäivällä tapahtumakoneisiin asennettiin sovellukset, pelit ja ajurit.</p>
-                </div>
-                <div class="diary-day">
-                  <h4>Tiistai 2.6. <span>9 h</span></h4>
-                  <p>Messumattojen kantaminen paikoilleen ja ylimääräisten mattojen siistiminen. Mattojen teippaus lattiaan ja saumojen limittäminen. Valokuitukaapelin veto ”nakkikioskille”, All-in-one-pöytien purku ja käyttöönotto sekä pelien lataus ja päivitys. Kotona vielä Minecraft-spawnin viimeistelyä.</p>
-                </div>
-                <div class="diary-day">
-                  <h4>Keskiviikko 3.6. <span>9 h</span></h4>
-                  <p>Edellisen päivän mattojen viimeistely: reunojen teippaus ja turvallisuuden tarkistus. Jääkaappien puhdistus sekä viimeisten pöytärivien päällystäminen suojapaperilla. Pieniä tehtäviä: tuolien siirtoa, verkkokaapeleita ja valot striimikorneriin. Lisäksi omien pelikamppeiden asettelu, ”Live”-palaveri game-tiimin kanssa ja nyyppäkierros.</p>
-                </div>
-                <div class="diary-day">
-                  <h4>Ennen tapahtumaa 15.5. <span>n. 12 h</span></h4>
-                  <p>Minecraft-adminina Game-tiimissä: survival-serverin spawnin suunnittelu ja rakentaminen, creative- ja survival-sääntöjen kirjoittaminen sekä säännölliset ryhmäpalaverit tiimin kanssa.</p>
-                </div>
-              </div>
-            </details>
           </div>
         </article>
 
@@ -1300,10 +1147,10 @@
         <article class="card">
           <div class="card-top">
             <span class="card-icon" aria-hidden="true">▦</span>
-            <span class="badge">Early access</span>
+            <span class="badge">Koulutyö · lopetettu</span>
           </div>
           <h3>2D-palikkapeli</h3>
-          <p>Selviytymis- ja rakentelupeli selaimessa. Tuhoa ja aseta palikoita vapaasti – projekti on vielä kehitysvaiheessa, mutta pelattavissa.</p>
+          <p>Koulutehtävänä tehty selviytymis- ja rakentelupeli selaimessa. Projekti on lopetettu, eikä siihen ole suunnitteilla jatkoa. Peli on yhä pelattavissa.</p>
           <ul class="chips">
             <li>Unity</li><li>C#</li><li>WebGL</li><li>2D</li>
           </ul>
@@ -1336,37 +1183,6 @@
           <span class="card-link disabled">Osa työharjoittelua</span>
         </article>
 
-      </div>
-    </div>
-  </section>
-
-  <!-- YHTEYS -->
-  <section class="section" id="yhteys">
-    <div class="wrap contact-grid">
-      <div class="contact-intro">
-        <div class="section-head">
-          <span class="section-num">05</span>
-          <h2>Otetaan yhteyttä</h2>
-        </div>
-        <p class="contact-lead">
-          Onko sinulla kysyttävää projekteista, harjoittelusta tai yhteistyöstä?
-          Laita viestiä – vastaan mielelläni.
-        </p>
-      </div>
-
-      <div class="contact-actions">
-        <p class="contact-label">Puhelin</p>
-        <p class="phone">+358 XX XXXXXXX</p>
-
-        <p class="contact-label">Sähköposti</p>
-        <div class="email-row">
-          <a class="email" href="mailto:touko.pelkonen@portfolio.fi">touko.pelkonen@portfolio.fi</a>
-          <button class="copy-btn" type="button" data-copy="touko.pelkonen@portfolio.fi">Kopioi</button>
-        </div>
-        <div class="contact-links">
-          <a class="btn btn-primary" href="mailto:touko.pelkonen@portfolio.fi">Lähetä sähköposti</a>
-          <a class="btn btn-ghost" href="https://github.com/t0ukoz" target="_blank" rel="noopener">GitHub</a>
-        </div>
       </div>
     </div>
   </section>
@@ -1406,21 +1222,6 @@
   document.querySelectorAll('[data-year]').forEach(el => {
     el.textContent = new Date().getFullYear();
   });
-
-  // Sähköpostin kopiointi
-  const copyBtn = document.querySelector('[data-copy]');
-  if (copyBtn) {
-    copyBtn.addEventListener('click', async () => {
-      const value = copyBtn.dataset.copy;
-      try {
-        await navigator.clipboard.writeText(value);
-        copyBtn.textContent = 'Kopioitu';
-        setTimeout(() => { copyBtn.textContent = 'Kopioi'; }, 1600);
-      } catch {
-        window.location.href = 'mailto:' + value;
-      }
-    });
-  }
 
 </script>
 
