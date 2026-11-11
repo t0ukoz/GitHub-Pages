@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Touko Pelkonen — Ohjelmistokehittäjä</title>
-<meta name="description" content="Touko Pelkonen — ohjelmistokehityksen opiskelija. Web- ja pelikehitystä, tietokoneiden kokoamista ja asiakaspalvelua. Työharjoittelu Vectoramalla 2026.">
+<meta name="description" content="Touko Pelkonen — ohjelmistokehityksen opiskelija. Web- ja pelikehitystä, 50+ kasattua ja myytyä pelikonetta, Xbox 360 -modaukset ja työharjoittelu Vectoramalla 2026.">
 <meta name="theme-color" content="#0a0a0b">
 <meta property="og:title" content="Touko Pelkonen — Ohjelmistokehittäjä">
 <meta property="og:description" content="Ohjelmistokehityksen opiskelija: web, pelit ja laitteisto.">
@@ -513,11 +513,145 @@
     line-height: 1.7;
   }
 
+  /* ---------- Myynti ---------- */
+
+  .sales-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+    margin-bottom: clamp(40px, 6vw, 64px);
+  }
+
+  .sales-intro p {
+    margin: 0 0 16px;
+    color: #d4d4d8;
+  }
+  .sales-intro p:last-child { margin-bottom: 0; }
+
+  .sales-stats {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 14px;
+  }
+
+  .sales-stats li {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sales-stats li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .sales-stats strong {
+    min-width: 72px;
+    font-size: 1.65rem;
+    font-weight: 600;
+    letter-spacing: -.03em;
+    color: var(--accent);
+  }
+
+  .sales-stats span {
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+
+  .gallery-title {
+    margin: 0 0 4px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: -.01em;
+  }
+
+  .gallery-note {
+    margin: 0 0 20px;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: clamp(36px, 5vw, 56px);
+  }
+  .gallery:last-child { margin-bottom: 0; }
+
+  .sale-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color .2s ease, transform .2s ease;
+  }
+  .sale-card:hover {
+    border-color: #3a3a40;
+    transform: translateY(-2px);
+  }
+
+  .sale-media {
+    aspect-ratio: 3 / 4;
+    background: #000;
+    overflow: hidden;
+  }
+
+  .sale-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .5s ease;
+  }
+  .sale-card:hover .sale-media img { transform: scale(1.03); }
+
+  .sale-body { padding: 14px 16px 16px; }
+
+  .sale-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 0 0 6px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .sale-title {
+    margin: 0 0 4px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -.01em;
+  }
+
+  .sale-specs {
+    margin: 0 0 12px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .sale-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    transition: gap .18s ease;
+  }
+  .sale-link:hover { gap: 10px; }
+
   /* ---------- Projects ---------- */
 
   .projects {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 18px;
   }
 
@@ -698,6 +832,12 @@
     .hero-card { max-width: 460px; }
     .about-grid { grid-template-columns: 1fr; }
     .contact-grid { grid-template-columns: 1fr; align-items: start; }
+    .sales-intro { grid-template-columns: 1fr; }
+    .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 560px) {
+    .gallery { grid-template-columns: 1fr; }
   }
 
   @media (max-width: 720px) {
@@ -705,10 +845,6 @@
     .menu-btn { display: inline-flex; }
     .entry { grid-template-columns: 1fr; gap: 10px; }
     .entry-when { padding-top: 0; }
-  }
-
-  @media (max-width: 640px) {
-    .projects { grid-template-columns: 1fr; }
   }
 
   @media (max-width: 360px) {
@@ -745,6 +881,7 @@
     <nav class="nav" aria-label="Päävalikko">
       <a href="#minusta">Minusta</a>
       <a href="#kokemus">Kokemus</a>
+      <a href="#myynti">Myynti</a>
       <a href="#projektit">Projektit</a>
       <a href="#yhteys">Yhteys</a>
     </nav>
@@ -757,6 +894,7 @@
   <div class="mobile-nav" id="mobile-nav">
     <a href="#minusta">Minusta</a>
     <a href="#kokemus">Kokemus</a>
+    <a href="#myynti">Myynti</a>
     <a href="#projektit">Projektit</a>
     <a href="#yhteys">Yhteys</a>
   </div>
@@ -772,10 +910,10 @@
         <h1>Touko<br>Pelkonen</h1>
         <p class="lead">
           Ohjelmistokehityksen opiskelija, jolla on vahva kiinnostus
-          käytännönläheiseen ohjelmointiin ja web-teknologioihin. Kasaan ja
-          huollan tietokoneita sekä konsoleita, ja kesällä 2026 olin
-          työharjoittelussa <strong>Vectoramalla</strong> tapahtuman
-          IT-tehtävissä.
+          käytännönläheiseen ohjelmointiin ja web-teknologioihin. Olen kasannut
+          ja myynyt lähemmäs 50 pelikonetta ja modaan Xbox 360 -konsoleita –
+          kesällä 2026 olin työharjoittelussa
+          <strong>Vectoramalla</strong> tapahtuman IT-tehtävissä.
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#projektit">Katso projektit</a>
@@ -787,6 +925,7 @@
         <dl>
           <div class="row"><dt>Opiskelu</dt><dd>OSAO · TK-perustutkinto</dd></div>
           <div class="row"><dt>Harjoittelu</dt><dd>Vectorama 2026</dd></div>
+          <div class="row"><dt>Myynti</dt><dd>50+ pelikonetta</dd></div>
           <div class="row"><dt>Painopiste</dt><dd>Web &amp; pelikehitys</dd></div>
           <div class="row"><dt>GitHub</dt><dd>@t0ukoz</dd></div>
         </dl>
@@ -816,9 +955,11 @@
             laitteistoteknologioissa.
           </p>
           <p>
-            Tällä hetkellä kasaan uusista ja käytetyistä osista pelikoneita ja
-            myyn niitä Tori.fi:ssä. Modaan Xbox 360 -konsoleita, huollan niiden
-            ohjaimia ja teen huoltoja myös muille konsoleille, kuten PS4:lle.
+            Aloitin pelikoneiden kasaamisen ja myynnin Tori.fi:ssä
+            alkuvuodesta 2025, ja koneita on myyty lähemmäs 50. Syyskuun 2026
+            alusta lähtien olen keskittynyt pääasiassa modattuihin Xbox 360
+            -konsoleihin – modaan myös niiden ohjaimia ja teen huoltoja muille
+            konsoleille, kuten PS4:lle.
           </p>
         </div>
 
@@ -956,11 +1097,201 @@
     </div>
   </section>
 
+  <!-- MYYNTI -->
+  <section class="section" id="myynti">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <h2>Myynti</h2>
+      </div>
+
+      <div class="sales-intro">
+        <div>
+          <p>
+            Aloitin pelikoneiden kasaamisen ja myynnin Tori.fi:ssä
+            alkuvuodesta 2025. Koneet syntyivät uusista ja käytetyistä osista,
+            ja niitä on myyty lähemmäs 50.
+          </p>
+          <p>
+            Syyskuun 2026 alussa huomasin, että modatut Xbox 360 -konsolit
+            myyvät hyvin, ja siirryin myymään pääasiassa niitä tietokoneiden
+            sijaan. Olin modannut konsoleita jo aiemmin pariin omaan käyttöön,
+            joten
+            RGH3-modaukset ja ohjainhuollot sujuivat tutulla kaavalla.
+          </p>
+          <p>Alla on valikoima myynti-ilmoituksia vuosilta 2025–2026.</p>
+        </div>
+
+        <ul class="sales-stats">
+          <li><strong>50+</strong><span>myytyä pelikonetta</span></li>
+          <li><strong>2025</strong><span>myynnin aloitus</span></li>
+          <li><strong>12</strong><span>valikoitua ilmoitusta</span></li>
+        </ul>
+      </div>
+
+      <h3 class="gallery-title">Pelitietokoneet 2025–2026</h3>
+      <p class="gallery-note">Kasattu uusista ja käytetyistä osista.</p>
+      <div class="gallery">
+
+        <article class="sale-card">
+          <div class="sale-media">
+            <img src="kuvat/pelikone-01.webp" alt="Erinomainen pelikone: i5, 16 GB DDR4 ja GTX 1060" width="760" height="1135" loading="lazy" decoding="async">
+          </div>
+          <div class="sale-body">
+            <p class="sale-meta"><span>10.9.2025</span><span>380 €</span></p>
+            <h4 class="sale-title">Erinomainen pelikone</h4>
+            <p class="sale-specs">i5 · 16 GB DDR4 · GTX 1060 6 GB</p>
+            <a class="sale-link" href="https://www.tori.fi/recommerce/forsale/item/29499220" target="_blank" rel="noopener" aria-label="Katso ilmoitus: Erinomainen pelikone (Tori.fi)">Ilmoitus <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="sale-card">
+          <div class="sale-media">
+            <img src="kuvat/pelikone-02.webp" alt="ARGB-pelitietokone: i7-4790K ja GTX 1650" width="760" height="1135" loading="lazy" decoding="async">
+          </div>
+          <div class="sale-body">
+            <p class="sale-meta"><span>17.10.2025</span><span>400 €</span></p>
+            <h4 class="sale-title">ARGB-pelitietokone</h4>
+            <p class="sale-specs">i7-4790K · GTX 1650 · Win11 Pro</p>
+            <a class="sale-link" href="https://www.tori.fi/recommerce/forsale/item/31632419" target="_blank" rel="noopener" aria-label="Katso ilmoitus: ARGB-pelitietokone (Tori.fi)">Ilmoitus <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="sale-card">
+          <div class="sale-media">
+            <img src="kuvat/pelikone-03.webp" alt="Budjettiluokan pelikone: i7-4770 ja GTX 1060" width="760" height="1135" loading="lazy" decoding="async">
+          </div>
+          <div class="sale-body">
+            <p class="sale-meta"><span>20.10.2025</span><span>250 €</span></p>
+            <h4 class="sale-title">Budjettiluokan pelikone</h4>
+            <p class="sale-specs">i7-4770 · GTX 1060 · Win11 Pro</p>
+            <a class="sale-link" href="https://www.tori.fi/recommerce/forsale/item/31781445" target="_blank" rel="noopener" aria-label="Katso ilmoitus: Budjettiluokan pelikone (Tori.fi)">Ilmoitus <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="sale-card">
+          <div class="sale-media">
+            <img src="kuvat/pelikone-04.webp" alt="Budjettipelitietokone: i5-3570K ja GTX 1050" width="760" height="1135" loading="lazy" decoding="async">
+          </div>
+          <div class="sale-body">
+            <p class="sale-meta"><span>5.11.2025</span><span>220 €</span></p>
+            <h4 class="sale-title">Budjettipelitietokone</h4>
+            <p class="sale-specs">i5-3570K · GTX 1050 · Win11 Pro</p>
+            <a class="sale-link" href="https://www.tori.fi/recommerce/forsale/item/32265956" target="_blank" rel="noopener" aria-label="Katso ilmoitus: Budjettipelitietokone (Tori.fi)">Ilmoitus <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="sale-card">
+          <div class="sale-media">
+            <img src="kuvat/pelikone-05.webp" alt="Budjettipelitietokone: i7 ja GTX 1070" width="760" height="1135" loading="lazy" decoding="async">
+          </div>
+          <div class="sale-body">
+            <p class="sale-meta"><span>24.11.2025</span><span>350 €</span></p>
+            <h4 class="sale-title">Budjettipelitietokone</h4>
+            <p class="sale-specs">i7 · GTX 1070 · Win11 Pro</p>
+            <a class="sale-link" href="https://www.tori.fi/recommerce/forsale/item/33519306" target="_blank" rel="noopener" aria-label="Katso ilmoitus: Budjettipelitietokone (Tori.fi)">Ilmoitus <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="sale-card">
+          <div class="sale-media">
+            <img src="kuvat/pelikone-06.webp" alt="Kunnostettu pelitietokone: GTX 1650 ja 16 GB DDR4" width="760" height="1135" loading="lazy" decoding="async">
+          </div>
+          <div class="sale-body">
+            <p class="sale-meta"><span>13.12.2025</span><span>325 €</span></p>
+            <h4 class="sale-title">Kunnostettu pelitietokone</h4>
+            <p class="sale-specs">GTX 1650 · 16 GB DDR4 · Win11 Pro</p>
+            <a class="sale-link" href="https://www.tori.fi/recommerce/forsale/item/34359070" target="_blank" rel="noopener" aria-label="Katso ilmoitus: Kunnostettu pelitietokone (Tori.fi)">Ilmoitus <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="sale-card">
+          <div class="sale-media">
+            <img src="kuvat/pelikone-07.webp" alt="Pelitietokone: i5-6600, GTX 1070 ja 16 GB DDR4" width="760" height="1135" loading="lazy" decoding="async">
+          </div>
+          <div class="sale-body">
+            <p class="sale-meta"><span>5.11.2026</span><span>400 €</span></p>
+            <h4 class="sale-title">Pelitietokone</h4>
+            <p class="sale-specs">i5-6600 · GTX 1070 8 GB · 16 GB DDR4</p>
+            <a class="sale-link" href="https://www.tori.fi/recommerce/forsale/item/49033896" target="_blank" rel="noopener" aria-label="Katso ilmoitus: Pelitietokone (Tori.fi)">Ilmoitus <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+      </div>
+
+      <h3 class="gallery-title">Xbox 360 -modaukset 2026</h3>
+      <p class="gallery-note">RGH3-modatut konsolit, puhdistus ja ohjainhuollot.</p>
+      <div class="gallery">
+
+        <article class="sale-card">
+          <div class="sale-media">
+            <img src="kuvat/xbox-01.webp" alt="Xbox 360 Slim RGH3 -modattu konsoli, 250 GB HDD" width="760" height="1135" loading="lazy" decoding="async">
+          </div>
+          <div class="sale-body">
+            <p class="sale-meta"><span>26.9.2026</span><span>100 €</span></p>
+            <h4 class="sale-title">Xbox 360 Slim RGH3</h4>
+            <p class="sale-specs">250 GB HDD · 35 peliä · Aurora</p>
+            <a class="sale-link" href="https://www.tori.fi/recommerce/forsale/item/47686171" target="_blank" rel="noopener" aria-label="Katso ilmoitus: Xbox 360 Slim RGH3 (Tori.fi)">Ilmoitus <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="sale-card">
+          <div class="sale-media">
+            <img src="kuvat/xbox-02.webp" alt="Xbox 360 Slim RGH3 -modattu konsoli, 250 GB HDD" width="760" height="1135" loading="lazy" decoding="async">
+          </div>
+          <div class="sale-body">
+            <p class="sale-meta"><span>30.9.2026</span><span>100 €</span></p>
+            <h4 class="sale-title">Xbox 360 Slim RGH3</h4>
+            <p class="sale-specs">250 GB HDD · Aurora Dashboard</p>
+            <a class="sale-link" href="https://www.tori.fi/recommerce/forsale/item/47868574" target="_blank" rel="noopener" aria-label="Katso ilmoitus: Xbox 360 Slim RGH3 (Tori.fi)">Ilmoitus <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="sale-card">
+          <div class="sale-media">
+            <img src="kuvat/xbox-03.webp" alt="Xbox 360 Phat RGH3 -modattu konsoli, 240 GB SSD" width="760" height="1135" loading="lazy" decoding="async">
+          </div>
+          <div class="sale-body">
+            <p class="sale-meta"><span>1.10.2026</span><span>100 €</span></p>
+            <h4 class="sale-title">Xbox 360 Phat RGH3</h4>
+            <p class="sale-specs">240 GB SSD · Phat</p>
+            <a class="sale-link" href="https://www.tori.fi/recommerce/forsale/item/47869428" target="_blank" rel="noopener" aria-label="Katso ilmoitus: Xbox 360 Phat RGH3 (Tori.fi)">Ilmoitus <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="sale-card">
+          <div class="sale-media">
+            <img src="kuvat/xbox-04.webp" alt="Xbox 360 Phat RGH3 -modattu konsoli, 320 GB HDD" width="760" height="1014" loading="lazy" decoding="async">
+          </div>
+          <div class="sale-body">
+            <p class="sale-meta"><span>3.11.2026</span><span>100 €</span></p>
+            <h4 class="sale-title">Xbox 360 Phat RGH3</h4>
+            <p class="sale-specs">320 GB HDD · Jasper</p>
+            <a class="sale-link" href="https://www.tori.fi/recommerce/forsale/item/49045183" target="_blank" rel="noopener" aria-label="Katso ilmoitus: Xbox 360 Phat RGH3 (Tori.fi)">Ilmoitus <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+        <article class="sale-card">
+          <div class="sale-media">
+            <img src="kuvat/xbox-05.webp" alt="Valkoinen Xbox 360 Slim White RGH3, 500 GB SSD ja ARGB-valaistus" width="760" height="1014" loading="lazy" decoding="async">
+          </div>
+          <div class="sale-body">
+            <p class="sale-meta"><span>6.11.2026</span><span>250 €</span></p>
+            <h4 class="sale-title">Xbox 360 Slim White RGH3</h4>
+            <p class="sale-specs">500 GB SSD · Custom ARGB</p>
+            <a class="sale-link" href="https://www.tori.fi/recommerce/forsale/item/49509828" target="_blank" rel="noopener" aria-label="Katso ilmoitus: Xbox 360 Slim White RGH3 (Tori.fi)">Ilmoitus <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
   <!-- PROJEKTIT -->
   <section class="section" id="projektit">
     <div class="wrap">
       <div class="section-head">
-        <span class="section-num">03</span>
+        <span class="section-num">04</span>
         <h2>Projektit</h2>
       </div>
 
@@ -977,19 +1308,6 @@
             <li>Unity</li><li>C#</li><li>WebGL</li><li>2D</li>
           </ul>
           <a class="card-link" href="Peli/Game.html" target="_blank" rel="noopener">Pelaa selaimessa <span aria-hidden="true">→</span></a>
-        </article>
-
-        <article class="card">
-          <div class="card-top">
-            <span class="card-icon" aria-hidden="true">▤</span>
-            <span class="badge">Oma projekti</span>
-          </div>
-          <h3>Pelikoneet ja konsolihuollot</h3>
-          <p>Kasaan uusista ja käytetyistä osista pelikoneita ja myyn niitä Tori.fi:ssä. Modaan Xbox 360 -konsoleita, huollan niiden ohjaimia sekä teen huoltoja muille konsoleille (esim. PS4).</p>
-          <ul class="chips">
-            <li>PC-kokoonpanot</li><li>Xbox 360</li><li>PS4</li><li>Huolto</li>
-          </ul>
-          <span class="card-link disabled">Tori.fi</span>
         </article>
 
         <article class="card">
@@ -1027,7 +1345,7 @@
     <div class="wrap contact-grid">
       <div class="contact-intro">
         <div class="section-head">
-          <span class="section-num">04</span>
+          <span class="section-num">05</span>
           <h2>Otetaan yhteyttä</h2>
         </div>
         <p class="contact-lead">
