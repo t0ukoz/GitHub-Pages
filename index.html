@@ -1,28 +1,68 @@
 <!DOCTYPE html>
-<html lang="fi">
+<html lang="fi" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Touko Pelkonen — Ohjelmistokehittäjä</title>
 <meta name="description" content="Touko Pelkonen — ohjelmistokehityksen opiskelija. Web- ja pelikehitystä, 50+ kasattua ja myytyä pelikonetta, Xbox 360 -modaukset ja työharjoittelu Vectoramalla 2026.">
-<meta name="theme-color" content="#f5f2ea">
+<meta name="theme-color" content="#0a0a0a" id="meta-theme">
+<script>
+  (function () {
+    document.documentElement.dataset.theme = 'dark';
+    try {
+      localStorage.removeItem('theme');
+      var saved = sessionStorage.getItem('theme');
+      if (saved === 'light' || saved === 'dark') {
+        document.documentElement.dataset.theme = saved;
+      }
+    } catch (e) {}
+  })();
+</script>
 <meta property="og:title" content="Touko Pelkonen — Ohjelmistokehittäjä">
 <meta property="og:description" content="Ohjelmistokehityksen opiskelija: web, pelit ja laitteisto.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%23181712'/%3E%3Ctext x='16' y='23' font-family='system-ui,sans-serif' font-size='18' font-weight='700' fill='%23f5f2ea' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='system-ui,sans-serif' font-size='18' font-weight='700' fill='%23ffffff' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
 
 <style>
-  :root {
-    --bg: #f5f2ea;
-    --surface: #fffdf8;
-    --surface-2: #ece6d9;
-    --border: #d8d2c4;
-    --text: #181712;
-    --muted: #6c675c;
-    --accent: #a83f1d;
-    --accent-soft: #f1ded3;
+  :root,
+  [data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0a0a0a;
+    --surface: #131313;
+    --surface-2: #1c1c1c;
+    --border: #2b2b2b;
+    --border-strong: #4a4a4a;
+    --text: #f5f5f5;
+    --body-text: #d6d6d6;
+    --muted: #a1a1a1;
+    --accent: #f5f5f5;
+    --accent-soft: #232323;
+    --btn-bg: #f5f5f5;
+    --btn-text: #0a0a0a;
+    --header-bg: rgba(10, 10, 10, .84);
+    --footer-bg: #050505;
+    --footer-text: #bdbdbd;
     --radius: 10px;
     --wrap: 1080px;
+  }
+
+  [data-theme="light"] {
+    color-scheme: light;
+    --bg: #ffffff;
+    --surface: #f7f7f7;
+    --surface-2: #eeeeee;
+    --border: #d9d9d9;
+    --border-strong: #a8a8a8;
+    --text: #0a0a0a;
+    --body-text: #2b2b2b;
+    --muted: #5f5f5f;
+    --accent: #0a0a0a;
+    --accent-soft: #ececec;
+    --btn-bg: #0a0a0a;
+    --btn-text: #ffffff;
+    --header-bg: rgba(255, 255, 255, .86);
+    --footer-bg: #0a0a0a;
+    --footer-text: #c7c7c7;
   }
 
   * { box-sizing: border-box; }
@@ -42,14 +82,15 @@
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    transition: background .2s ease, color .2s ease;
   }
 
-  ::selection { background: var(--accent); color: #fff8f2; }
+  ::selection { background: var(--text); color: var(--bg); }
 
   a { color: inherit; }
 
   :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--text);
     outline-offset: 3px;
     border-radius: 2px;
   }
@@ -65,8 +106,8 @@
     position: absolute;
     left: -9999px;
     top: 0;
-    background: var(--accent);
-    color: #fff8f2;
+    background: var(--text);
+    color: var(--bg);
     padding: 10px 16px;
     z-index: 100;
     font-weight: 600;
@@ -79,10 +120,10 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(245, 242, 234, .88);
+    background: var(--header-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-top: 3px solid var(--accent);
+    border-top: 2px solid var(--text);
     border-bottom: 1px solid var(--border);
   }
 
@@ -110,8 +151,8 @@
     width: 30px;
     height: 28px;
     border-radius: 4px;
-    background: var(--text);
-    color: var(--bg);
+    background: var(--btn-bg);
+    color: var(--btn-text);
     font-size: 13px;
     font-weight: 700;
   }
@@ -131,8 +172,13 @@
   .nav a:hover {
     color: var(--text);
     text-decoration: underline;
-    text-decoration-color: var(--accent);
     text-underline-offset: 5px;
+  }
+
+  .header-tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   /* ---------- Buttons ---------- */
@@ -151,22 +197,24 @@
     line-height: 1.2;
     text-decoration: none;
     cursor: pointer;
-    transition: background .18s ease, border-color .18s ease, color .18s ease;
+    transition: opacity .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
   }
 
   .btn-primary {
-    background: var(--accent);
-    color: #fff8f2;
+    background: var(--btn-bg);
+    border-color: var(--btn-bg);
+    color: var(--btn-text);
   }
-  .btn-primary:hover { background: #8d3416; }
+  .btn-primary:hover { opacity: .82; }
 
   .btn-ghost {
     background: transparent;
-    border-color: var(--border);
+    border-color: var(--border-strong);
     color: var(--text);
   }
   .btn-ghost:hover { border-color: var(--text); background: var(--surface); }
 
+  .theme-btn,
   .menu-btn {
     display: none;
     width: 40px;
@@ -178,7 +226,17 @@
     border-radius: 5px;
     color: var(--text);
     cursor: pointer;
+    transition: border-color .18s ease, background .18s ease;
   }
+  .theme-btn:hover,
+  .menu-btn:hover { border-color: var(--border-strong); background: var(--surface); }
+
+  .theme-btn { display: inline-grid; place-items: center; }
+  .theme-btn svg { width: 17px; height: 17px; display: block; }
+  .theme-btn .icon-moon { display: none; }
+  [data-theme="light"] .theme-btn .icon-sun { display: none; }
+  [data-theme="light"] .theme-btn .icon-moon { display: block; }
+
   .menu-btn span {
     display: block;
     width: 16px;
@@ -205,7 +263,7 @@
   .mobile-nav {
     display: none;
     border-bottom: 1px solid var(--border);
-    background: var(--surface);
+    background: var(--bg);
   }
   .mobile-nav.open { display: block; }
   .mobile-nav a {
@@ -246,24 +304,23 @@
     width: 6px;
     height: 6px;
     border-radius: 1px;
-    background: var(--accent);
+    background: var(--text);
     flex: none;
   }
 
   h1 {
     margin: 0 0 26px;
-    font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
-    font-size: clamp(3.3rem, 9.5vw, 6.6rem);
-    line-height: .94;
+    font-size: clamp(3.1rem, 9vw, 6.2rem);
+    line-height: .95;
     letter-spacing: -.045em;
-    font-weight: 500;
+    font-weight: 650;
   }
 
   .lead {
     max-width: 49ch;
     margin: 0 0 32px;
     font-size: clamp(1rem, 1.6vw, 1.1rem);
-    color: #4f4a40;
+    color: var(--body-text);
   }
 
   .lead strong { color: var(--text); font-weight: 600; }
@@ -328,17 +385,16 @@
     background: var(--surface);
     font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
     font-size: 11px;
-    color: var(--accent);
+    color: var(--muted);
     letter-spacing: .04em;
   }
 
   h2 {
     margin: 0;
-    font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
-    font-size: clamp(1.8rem, 3.6vw, 2.55rem);
+    font-size: clamp(1.7rem, 3.4vw, 2.35rem);
     line-height: 1.15;
-    letter-spacing: -.025em;
-    font-weight: 500;
+    letter-spacing: -.03em;
+    font-weight: 650;
   }
 
   .section-intro {
@@ -355,7 +411,7 @@
     gap: clamp(32px, 6vw, 72px);
   }
 
-  .about-text p { margin: 0 0 18px; color: #4f4a40; }
+  .about-text p { margin: 0 0 18px; color: var(--body-text); }
   .about-text p:last-child { margin-bottom: 0; }
 
   .skills {
@@ -388,7 +444,7 @@
     border-radius: 4px;
     background: var(--surface);
     font-size: 12.5px;
-    color: #4f4a40;
+    color: var(--body-text);
   }
 
   /* ---------- Timeline ---------- */
@@ -439,7 +495,7 @@
 
   .entry .org {
     margin: 0 0 6px;
-    color: var(--accent);
+    color: var(--text);
     font-size: 14px;
     font-weight: 600;
   }
@@ -453,11 +509,11 @@
   .entry ul {
     margin: 0 0 4px;
     padding-left: 18px;
-    color: #4f4a40;
+    color: var(--body-text);
     font-size: 15px;
   }
   .entry ul li { margin-bottom: 5px; }
-  .entry ul li::marker { color: #a39c8d; }
+  .entry ul li::marker { color: var(--muted); }
 
   /* ---------- Myynti ---------- */
 
@@ -471,7 +527,7 @@
 
   .sales-intro p {
     margin: 0 0 16px;
-    color: #4f4a40;
+    color: var(--body-text);
   }
   .sales-intro p:last-child { margin-bottom: 0; }
 
@@ -497,11 +553,10 @@
 
   .sales-stats strong {
     min-width: 72px;
-    font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
     font-size: 1.7rem;
-    font-weight: 600;
-    letter-spacing: -.02em;
-    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: -.03em;
+    color: var(--text);
   }
 
   .sales-stats span {
@@ -537,7 +592,7 @@
     overflow: hidden;
     transition: border-color .2s ease;
   }
-  .sale-card:hover { border-color: var(--accent); }
+  .sale-card:hover { border-color: var(--border-strong); }
 
   .sale-media {
     aspect-ratio: 3 / 4;
@@ -586,11 +641,13 @@
     gap: 6px;
     font-size: 13px;
     font-weight: 600;
-    color: var(--accent);
-    text-decoration: none;
-    transition: gap .18s ease;
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+    transition: gap .18s ease, text-decoration-color .18s ease;
   }
-  .sale-link:hover { gap: 10px; }
+  .sale-link:hover { gap: 10px; text-decoration-color: var(--text); }
 
   /* ---------- Projects ---------- */
 
@@ -609,7 +666,7 @@
     padding: 24px;
     transition: border-color .2s ease;
   }
-  .card:hover { border-color: var(--accent); }
+  .card:hover { border-color: var(--border-strong); }
 
   .card-top {
     display: flex;
@@ -626,7 +683,7 @@
     height: 36px;
     border-radius: 6px;
     background: var(--accent-soft);
-    color: var(--accent);
+    color: var(--text);
     font-size: 16px;
   }
 
@@ -667,12 +724,12 @@
     gap: 7px;
     font-size: 14px;
     font-weight: 600;
-    color: var(--accent);
+    color: var(--text);
     text-decoration: none;
     border-bottom: 1px solid transparent;
     transition: gap .18s ease, border-color .18s ease;
   }
-  .card-link:hover { gap: 11px; border-color: var(--accent); }
+  .card-link:hover { gap: 11px; border-color: var(--text); }
 
   .card-link.disabled { color: var(--muted); cursor: default; }
   .card-link.disabled:hover { gap: 7px; border-color: transparent; }
@@ -680,10 +737,10 @@
   /* ---------- Footer ---------- */
 
   footer {
-    background: var(--text);
+    background: var(--footer-bg);
     padding: 32px 0;
     font-size: 13px;
-    color: #c9c3b5;
+    color: var(--footer-text);
   }
 
   .footer-inner {
@@ -694,8 +751,8 @@
     gap: 12px;
   }
 
-  footer a { color: #ece6d9; text-decoration: none; }
-  footer a:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+  footer a { color: #ffffff; text-decoration: none; }
+  footer a:hover { text-decoration: underline; text-underline-offset: 4px; }
 
   /* ---------- Responsive ---------- */
 
@@ -731,6 +788,17 @@
   }
 
   @media print {
+    :root {
+      --bg: #fff;
+      --surface: #fff;
+      --surface-2: #fff;
+      --border: #ddd;
+      --border-strong: #999;
+      --text: #111;
+      --body-text: #222;
+      --muted: #555;
+      --accent-soft: #f2f2f2;
+    }
     .site-header, .mobile-nav, .hero-actions, footer { display: none !important; }
     body { background: #fff; color: #111; }
     .section { border-color: #ddd; }
@@ -756,9 +824,20 @@
       <a href="#projektit">Projektit</a>
     </nav>
 
-    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Avaa valikko">
-      <span></span>
-    </button>
+    <div class="header-tools">
+      <button class="theme-btn" type="button" aria-label="Vaihda vaaleaan teemaan" title="Vaihda vaaleaan teemaan">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8z"></path>
+        </svg>
+      </button>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Avaa valikko">
+        <span></span>
+      </button>
+    </div>
   </div>
 
   <div class="mobile-nav" id="mobile-nav">
@@ -1215,6 +1294,28 @@
         menuBtn.setAttribute('aria-expanded', 'false');
         menuBtn.setAttribute('aria-label', 'Avaa valikko');
       });
+    });
+  }
+
+  // Teeman vaihto
+  const themeBtn = document.querySelector('.theme-btn');
+  const metaTheme = document.getElementById('meta-theme');
+  const root = document.documentElement;
+
+  function applyTheme(theme) {
+    const light = theme === 'light';
+    root.dataset.theme = light ? 'light' : 'dark';
+    themeBtn.setAttribute('aria-label', light ? 'Vaihda tummaan teemaan' : 'Vaihda vaaleaan teemaan');
+    themeBtn.setAttribute('title', light ? 'Vaihda tummaan teemaan' : 'Vaihda vaaleaan teemaan');
+    if (metaTheme) metaTheme.setAttribute('content', light ? '#ffffff' : '#0a0a0a');
+    try { sessionStorage.setItem('theme', light ? 'light' : 'dark'); } catch (e) {}
+  }
+
+  applyTheme(root.dataset.theme === 'light' ? 'light' : 'dark');
+
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      applyTheme(root.dataset.theme === 'light' ? 'dark' : 'light');
     });
   }
 
